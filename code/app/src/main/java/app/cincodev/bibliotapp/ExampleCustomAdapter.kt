@@ -8,8 +8,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 
-class CustomAdapter(private val dataSet: Array<String>) :
-    RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
+class ExampleCustomAdapter(private val dataSet: Array<String>) :
+    RecyclerView.Adapter<ExampleCustomAdapter.ViewHolder>() {
 
     /**
      * Provide a reference to the type of views that you are using

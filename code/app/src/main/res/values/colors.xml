@@ -6,4 +6,5 @@
     <color name="unifor.marinho">#132190</color>
     <color name="unifor.azul_claro">#E4F2FE</color>
     <color name="unifor.gelo">#87B7FE</color>
+    <color name="bibliotapp.button.text">@android:color/white</color>
 </resources>

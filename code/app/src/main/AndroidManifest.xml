@@ -12,7 +12,97 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Bibliotapp">
         <activity
-            android:name=".MainActivityB"
+            android:name=".AdminSpaceBookingSearch"
+            android:exported="false" />
+        <activity
+            android:name=".AdminBookSearch"
+            android:exported="false" />
+        <activity
+            android:name=".AdminBookShelfMap"
+            android:exported="false" />
+        <activity
+            android:name=".AdminFee"
+            android:exported="false" />
+        <activity
+            android:name=".AdminLoanSearch"
+            android:exported="false" />
+        <activity
+            android:name=".AdminBookEditor"
+            android:exported="false" />
+        <activity
+            android:name=".AdminBookRegister"
+            android:exported="false" />
+        <activity
+            android:name=".AdminDigitalizationOrders"
+            android:exported="false" />
+        <activity
+            android:name=".AdminHome"
+            android:exported="false" />
+        <activity
+            android:name=".UserChatbot"
+            android:exported="false" />
+        <activity
+            android:name=".UserBookSearch"
+            android:exported="false" />
+        <activity
+            android:name=".UserDigitalizations"
+            android:exported="false" />
+        <activity
+            android:name=".UserDigitalizationOrder"
+            android:exported="false" />
+        <activity
+            android:name=".UserSpaceBooking"
+            android:exported="false" />
+        <activity
+            android:name=".UserSpaceMap"
+            android:exported="false" />
+        <activity
+            android:name=".UserBookShelfMap"
+            android:exported="false" />
+        <activity
+            android:name=".UserFailedRegister"
+            android:exported="false" />
+        <activity
+            android:name=".UserFailedOrder"
+            android:exported="false" />
+        <activity
+            android:name=".UserFailedBooking"
+            android:exported="false" />
+        <activity
+            android:name=".UserSuccesfulRegister"
+            android:exported="false" />
+        <activity
+            android:name=".UserSuccesfulOrder"
+            android:exported="false" />
+        <activity
+            android:name=".UserSuccesfulBooking"
+            android:exported="false" />
+        <activity
+            android:name=".UserProcessingRegister"
+            android:exported="false" />
+        <activity
+            android:name=".UserProcessingBooking"
+            android:exported="false" />
+        <activity
+            android:name=".UserBookDetail"
+            android:exported="false" />
+        <activity
+            android:name=".UserHome"
+            android:exported="false" />
+        <activity
+            android:name=".AccountRegister"
+            android:exported="false" />
+        <activity
+            android:name=".ForgetPassword"
+            android:exported="false" />
+        <activity
+            android:name=".Login"
+            android:exported="false" />
+        <activity
+            android:name=".Welcome"
+            android:exported="false" />
+        <activity
+            android:name=".ExampleRecyclerViewActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
