@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/wrapperItemDigitalizacao"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/labelRequisitante"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Requisitante"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/dataRequisitante"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="235711" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/labelPaginas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Páginas"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/dataPaginas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2-7" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/labelRegistro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Registro"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/dataRegistro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="117532" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/dataStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Concluído" />
+
+    <ImageButton
+        android:id="@+id/menuItemDigitalizacao"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        app:srcCompat="@drawable/ic_menu_digitalizacoes"
+        android:clickable="true"
+        android:focusable="true"/>
+
+</LinearLayout>
