@@ -1,20 +1,26 @@
 package app.cincodev.bibliotapp
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 
 class Welcome : AppCompatActivity() {
+    lateinit var loginButton : Button
+    lateinit var registerAccountButton : Button
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_welcome)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+
+        loginButton = findViewById(R.id.welcomeLoginButton)
+        loginButton.setOnClickListener {
+            startActivity(Intent(this@Welcome, Login::class.java))
+        }
+
+        registerAccountButton = findViewById(R.id.welcomeRegisterAccountButton)
+        registerAccountButton.setOnClickListener {
+            startActivity(Intent(this@Welcome, AccountRegister::class.java))
         }
     }
 }
