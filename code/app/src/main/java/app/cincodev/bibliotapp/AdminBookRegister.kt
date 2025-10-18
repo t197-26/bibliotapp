@@ -1,20 +1,39 @@
 package app.cincodev.bibliotapp
 
+import android.net.Uri
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
+import android.widget.ImageButton
+import android.widget.ImageView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 
 class AdminBookRegister : AppCompatActivity() {
+    lateinit var capa:ImageView
+    lateinit var selecionarCapa: ImageButton
+
+    // Inside your Activity or Fragment
+    private val pickImageLauncher =
+        registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+            uri?.let {
+                // Here you get the selected image URI
+                capa.setImageURI(it) // Example: set it to an ImageView
+            }
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_admin_book_register)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+
+        capa = findViewById(R.id.capa)
+        selecionarCapa = findViewById(R.id.selecionarCapa)
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+        selecionarCapa.setOnClickListener {
+            pickImageLauncher.launch("image/*")
         }
     }
 }
+
