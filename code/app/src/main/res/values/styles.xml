@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="GreenText" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">#00FF00</item>
+    </style>
+
+    <style name="MenuButton" parent="@style/Widget.AppCompat.Button">
+        <item name="android:layout_width">100dp</item>
+        <item name="android:layout_height">100dp</item>
+        <item name="android:backgroundTint">@color/unifor.anil</item>
+        <item name="android:background">@drawable/bg_rounded_button</item>
+    </style>
+
+    <style name="BlueButton">
+        <item name="android:layout_width">320dp</item>
+        <item name="android:layout_height">56dp</item>
+        <item name="android:backgroundTint">@color/unifor.anil</item>
+    </style>
+
+    <style name="GreyButton">
+        <item name="android:layout_width">320dp</item>
+        <item name="android:layout_height">52dp</item>
+        <item name="android:backgroundTint">@color/unifor.azul_claro</item>
+        <item name="android:textColor">@color/unifor.marinho</item>
+    </style>
+</resources>
