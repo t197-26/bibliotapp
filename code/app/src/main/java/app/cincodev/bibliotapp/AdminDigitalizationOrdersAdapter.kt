@@ -8,8 +8,6 @@ import android.widget.ImageButton
 import android.widget.PopupWindow
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.view.ContextThemeWrapper
-import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
 
 class AdminDigitalizationOrdersAdapter(private val dataSet: Array<DigitalizacaoItem>) :
@@ -26,7 +24,7 @@ class AdminDigitalizationOrdersAdapter(private val dataSet: Array<DigitalizacaoI
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(viewGroup.context)
-            .inflate(R.layout.item_digitalizacao, viewGroup, false)
+            .inflate(R.layout.item_digitalization_order, viewGroup, false)
 
         return ViewHolder(view)
     }
