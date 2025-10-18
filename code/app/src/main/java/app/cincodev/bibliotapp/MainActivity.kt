@@ -4,9 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -17,25 +17,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-    }
 
-    override fun onResume() {
-        super.onResume()
-    }
-
-    override fun onPause() {
-        super.onPause()
-    }
-
-    override fun onStop() {
-        super.onStop()
-    }
-
-    override fun onRestart() {
-        super.onRestart()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
+        lifecycleScope.launch {
+            delay(2000)
+            val intent = Intent(this@MainActivity, Welcome::class.java)
+            startActivity(intent)
+        }
     }
 }
