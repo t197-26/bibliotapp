@@ -6,6 +6,8 @@ import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+
 class UserHome : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,9 +39,11 @@ class UserHome : AppCompatActivity() {
 
         val btnDigitalizacoes: ImageView = findViewById(R.id.btnDIgitalizacoes)
         val btnReservarEspaco: ImageView = findViewById(R.id.btnReservarEspaco)
+        val fabChatbot: FloatingActionButton = findViewById(R.id.fab)
 
         btnDigitalizacoes.setOnClickListener { openDigitalizacoes() }
         btnReservarEspaco.setOnClickListener { openReservarEspaco() }
+        fabChatbot.setOnClickListener { openChatbot() }
     }
 
     private fun openDigitalizacoes() {
@@ -51,4 +55,10 @@ class UserHome : AppCompatActivity() {
         val intent = Intent(this, UserSpaceBooking::class.java)
         startActivity(intent)
     }
+
+    private fun openChatbot() {
+        val intent = Intent(this, UserChatbot::class.java)
+        startActivity(intent)
+    }
+
 }
