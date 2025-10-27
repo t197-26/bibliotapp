@@ -2,6 +2,7 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="wrong_red">#F42F17</color>
     <color name="unifor.anil">#004AF7</color>
     <color name="unifor.marinho">#132190</color>
     <color name="unifor.azul_claro">#E4F2FE</color>
