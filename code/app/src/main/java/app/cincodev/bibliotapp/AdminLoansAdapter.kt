@@ -1,5 +1,6 @@
 package app.cincodev.bibliotapp
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
@@ -60,7 +61,7 @@ class AdminLoansAdapter(
         }
 
         popupView.findViewById<Button>(R.id.btnReceber).setOnClickListener {
-            Toast.makeText(context, "Recebendo...", Toast.LENGTH_SHORT).show()
+            confirmarRecebimento(context)
             popupWindow.dismiss()
         }
 
@@ -72,4 +73,27 @@ class AdminLoansAdapter(
 
         popupWindow.showAsDropDown(anchorView, -85, 0)
     }
+
+    private fun confirmarRecebimento(context: android.content.Context) {
+        val dialogView = LayoutInflater.from(context)
+            .inflate(R.layout.dialog_confirmation_loan_received, null)
+
+        val dialog = AlertDialog.Builder(context)
+            .setView(dialogView)
+            .create()
+
+        val btnCancelar = dialogView.findViewById<Button>(R.id.btnCancelar)
+        val btnConfirmar = dialogView.findViewById<Button>(R.id.btnConfirmar)
+
+        btnCancelar.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        btnConfirmar.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
 }

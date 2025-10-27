@@ -12,15 +12,7 @@ class AdminLoanSearch : AppCompatActivity() {
 
         val dataset = arrayOf(
             Loan("2357911", "245099", "0 dias", "Em dia"),
-            Loan("2357912", "245100", "3 dias", "Atrasado"),
-            Loan("2357913", "245101", "0 dias", "Em dia"),
-            Loan("2357914", "245102", "5 dias", "Atrasado"),
-            Loan("2357915", "245103", "0 dias", "Em dia"),
-            Loan("2357916", "245104", "1 dia", "Atrasado"),
-            Loan("2357917", "245105", "0 dias", "Em dia"),
-            Loan("2357918", "245106", "7 dias", "Atrasado"),
-            Loan("2357919", "245107", "0 dias", "Em dia"),
-            Loan("2357920", "245108", "2 dias", "Atrasado")
+            Loan("2357912", "245100", "3 dias", "Atrasado")
         )
 
         val customAdapter = AdminLoansAdapter(dataset)
