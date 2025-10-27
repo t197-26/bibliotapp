@@ -17,21 +17,23 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
-            android:id="@+id/LoginArrowBack"
+            android:id="@+id/AdminHomeArrowBack"
             style="@style/ArrowBack"
-            app:srcCompat="@drawable/ic_arrow_back"
-            tools:layout_editor_absoluteX="10dp"
-            tools:layout_editor_absoluteY="10dp" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_arrow_back" />
 
         <TextView
             android:id="@+id/AdminHomeTitleTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="16dp"
             android:text="Bibliotapp"
             android:textColor="@color/unifor.marinho"
             android:textSize="20sp"
-            tools:layout_editor_absoluteX="100dp"
-            tools:layout_editor_absoluteY="16dp" />
+            app:layout_constraintStart_toEndOf="@+id/AdminHomeArrowBack"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/AdminHomeWelcomeTextView"
@@ -67,9 +69,10 @@
                 android:id="@+id/AdminHomeBodyDigitalizacoesIconImageView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:tint="@color/white"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_home" />
+                app:srcCompat="@drawable/ic_docs" />
 
             <TextView
                 android:id="@+id/AdminHomeBodyDigitalizacoesTextView"
@@ -101,7 +104,8 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_home" />
+                app:srcCompat="@drawable/ic_add"
+                android:tint="@color/white" />
 
             <TextView
                 android:id="@+id/AdminHomeBodyCadastrarMaterialTextView"
@@ -133,7 +137,8 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_home" />
+                app:srcCompat="@drawable/ic_edit"
+                android:tint="@color/white" />
 
             <TextView
                 android:id="@+id/AdminHomeBodyEditarMaterialTextView"
@@ -165,7 +170,8 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_home" />
+                app:srcCompat="@drawable/ic_format_list_bulleted"
+                android:tint="@color/white" />
 
             <TextView
                 android:id="@+id/AdminHomeBodyEmprestimosTextView"
@@ -197,7 +203,8 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_home" />
+                app:srcCompat="@drawable/ic_schedule"
+                android:tint="@color/white" />
 
             <TextView
                 android:id="@+id/AdminHomeBodyReservasEspacoTextView"
