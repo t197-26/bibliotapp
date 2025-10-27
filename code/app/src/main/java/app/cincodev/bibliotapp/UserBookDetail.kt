@@ -1,5 +1,6 @@
 package app.cincodev.bibliotapp
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.PopupWindow
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
 class UserBookDetail : AppCompatActivity() {
@@ -40,7 +40,7 @@ class UserBookDetail : AppCompatActivity() {
 
         // Setup button listeners inside popup
         popupView.findViewById<Button>(R.id.btnReservar).setOnClickListener {
-            Toast.makeText(this, "Reservar", Toast.LENGTH_SHORT).show()
+            confirmarReserva(context = this)
             popupWindow.dismiss()
         }
 
@@ -57,5 +57,28 @@ class UserBookDetail : AppCompatActivity() {
         // Show the popup anchored to the menu button
         // You can adjust offsets (x, y) as needed
         popupWindow.showAsDropDown(anchorView, -150, -350)
+    }
+
+    private fun confirmarReserva(context: android.content.Context) {
+        val dialogView = LayoutInflater.from(context)
+            .inflate(R.layout.dialog_confirmation_reservation_book, null)
+
+        val dialog = AlertDialog.Builder(context)
+            .setView(dialogView)
+            .create()
+
+        val btnCancelar = dialogView.findViewById<Button>(R.id.btnCancelar)
+        val btnConfirmar = dialogView.findViewById<Button>(R.id.btnConfirmar)
+
+        btnCancelar.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        btnConfirmar.setOnClickListener {
+            startActivity(Intent(this, UserProcessingBooking::class.java))
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 }
