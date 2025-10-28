@@ -69,7 +69,7 @@ class AdminDigitalizationOrdersAdapter(private val dataSet: Array<DigitalizacaoI
             }
 
             popupView.findViewById<Button>(R.id.btnMapa).setOnClickListener {
-                val intent = Intent(context, AdminBookShelfMap::class.java)
+                val intent = Intent(context, UserSpaceMap::class.java)
                 Toast.makeText(context, "Mapa", Toast.LENGTH_SHORT).show()
                 context.startActivity(intent)
                 popupWindow.dismiss()
