@@ -1,11 +1,7 @@
 package app.cincodev.bibliotapp
-
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -16,9 +12,10 @@ class UserSuccesfulBooking : AppCompatActivity() {
         setContentView(R.layout.activity_user_succesful_booking)
 
         lifecycleScope.launch {
-            delay(1000)
+            delay(2000) // 2 seconds
             val intent = Intent(this@UserSuccesfulBooking, UserBookDetail::class.java)
             startActivity(intent)
+            finish()
         }
     }
 }
