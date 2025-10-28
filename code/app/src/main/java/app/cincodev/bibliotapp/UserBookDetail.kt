@@ -6,15 +6,23 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.PopupWindow
 import androidx.appcompat.app.AppCompatActivity
 
 class UserBookDetail : AppCompatActivity() {
 
+    lateinit var arrowBackButtonView: ImageButton
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_book_detail)
+
+        arrowBackButtonView = findViewById(R.id.userBookDetailArrowBack)
+        arrowBackButtonView.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
 
         val bookExemplarMenu: ImageView = findViewById(R.id.bookExemplarMenu)
 

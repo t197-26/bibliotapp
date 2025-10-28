@@ -1,11 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".UserBookDetail">
+
+    <LinearLayout
+        android:id="@+id/headerBookDetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/userBookDetailArrowBack"
+            style="@style/ArrowBack"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="8dp"
+            app:srcCompat="@drawable/ic_arrow_back" />
+
+    </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -40,9 +57,9 @@
 
                 <TableLayout
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/bg_book_details"
-                    android:padding="8dp"
-                    android:layout_height="wrap_content">
+                    android:padding="8dp">
 
                     <TableRow
                         android:layout_width="match_parent"
@@ -308,4 +325,4 @@
         </LinearLayout>
     </ScrollView>
 
-</FrameLayout>
+</LinearLayout>
