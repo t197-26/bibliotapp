@@ -9,7 +9,7 @@ import androidx.core.view.WindowInsetsCompat
 
 class UserChatbot : AppCompatActivity() {
 
-    private lateinit var arrowBackButton: ImageButton
+    lateinit var arrowBackButton: ImageButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
