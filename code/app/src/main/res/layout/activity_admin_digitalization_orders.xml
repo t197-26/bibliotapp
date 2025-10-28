@@ -7,13 +7,50 @@
     android:layout_height="match_parent"
     tools:context=".AdminDigitalizationOrders">
 
+    <ImageButton
+        android:id="@+id/AdminDigitalizationOrdersArrowBack"
+        style="@style/ArrowBack"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_arrow_back" />
+
+    <TextView
+        android:id="@+id/AdminDigitalizationOrdersTitleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="16dp"
+        android:text="Digitalizações"
+        android:textColor="@color/unifor.marinho"
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@+id/AdminDigitalizationOrdersArrowBack"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="80dp"
         android:padding="24dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/AdminDigitalizationOrdersBottomBarLinearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/AdminDigitalizationOrdersBottomBarLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:gravity="center|top"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <ImageView
+            android:id="@+id/AdminDigitalizationOrdersBottomBarHomeImageView"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/ic_home" />
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
