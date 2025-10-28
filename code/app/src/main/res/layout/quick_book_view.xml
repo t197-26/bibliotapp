@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp">
+
+    <LinearLayout
+        android:id="@+id/quickBookLayout"
+        android:layout_width="118dp"
+        android:layout_height="185dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/quickBookCapa"
+            android:layout_width="match_parent"
+            android:layout_height="145dp"
+            app:srcCompat="@drawable/book_02" />
+
+        <TextView
+            android:id="@+id/quickBookTitulo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="Governança de TI" />
+
+        <TextView
+            android:id="@+id/quickBookDevolucao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="2 dias restantes" />
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

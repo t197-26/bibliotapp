@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    tools:context=".UserBookSearch">
+
+
+    <ImageButton
+        android:id="@+id/UserBookSearchArrowBack"
+        style="@style/ArrowBack"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_arrow_back" />
+
+
+    <TextView
+        android:id="@+id/textView24"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="16dp"
+        android:text="Material"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/UserBookSearchArrowBack"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <LinearLayout
+        android:id="@+id/searchContainer"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="80dp"
+        android:background="@drawable/bg_search_bar"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <EditText
+            android:id="@+id/inputSearch"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:hint="Buscar por todos os campos"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:textColor="#000"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:contentDescription="Buscar"
+            android:src="@drawable/ic_search" />
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:id="@+id/AdminHomeBottomBarLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:gravity="center|top"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <ImageView
+            android:id="@+id/AdminHomeBottomBarHomeImageView"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/ic_home" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView29"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="150dp"
+        android:layout_marginEnd="150dp"
+        android:text="Nenhum resultado"
+        android:textColor="@color/unifor.anil"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="354dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

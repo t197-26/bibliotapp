@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    tools:context=".UserSpaceMap">
+
+    <!-- Botão de voltar -->
+    <ImageButton
+        android:id="@+id/SpaceMapArrowBack"
+        style="@style/ArrowBack"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_arrow_back" />
+
+    <!-- Título -->
+    <TextView
+        android:id="@+id/textView23"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="20dp"
+        android:text="Mapa"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/SpaceMapArrowBack"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Container do mapa -->
+    <LinearLayout
+        android:id="@+id/containerMapa"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textView23"
+        app:layout_constraintVertical_bias="0.0">
+
+        <GridLayout
+            android:id="@+id/gridMapa"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:alignmentMode="alignMargins"
+            android:columnCount="5"
+            android:rowCount="3"
+            android:useDefaultMargins="true">
+
+            <Button
+                android:id="@+id/estante1"
+                style="@style/EstanteButton"
+
+                android:text="1" />
+
+            <Button
+                android:id="@+id/estante2"
+                style="@style/EstanteButton"
+                android:text="2" />
+
+            <Button
+                android:id="@+id/estante3"
+                style="@style/EstanteButton"
+                android:text="3" />
+
+            <Button
+                android:id="@+id/estante4"
+                style="@style/EstanteButton"
+                android:text="4" />
+
+            <Button
+                android:id="@+id/estante5"
+                style="@style/EstanteButton"
+                android:text="5" />
+
+            <Button
+                android:id="@+id/estante6"
+                style="@style/EstanteButton"
+                android:text="6" />
+
+            <Button
+                android:id="@+id/estante7"
+                style="@style/EstanteButton"
+                android:text="7" />
+
+            <Button
+                android:id="@+id/estante8"
+                style="@style/EstanteButton"
+                android:text="8" />
+
+            <Button
+                android:id="@+id/estante9"
+                style="@style/EstanteButton"
+                android:text="9" />
+
+            <Button
+                android:id="@+id/estante10"
+                style="@style/EstanteButton"
+                android:text="10" />
+
+            <Button
+                android:id="@+id/estante11"
+                style="@style/EstanteButton"
+                android:text="11" />
+
+            <Button
+                android:id="@+id/estante12"
+                style="@style/EstanteButton"
+                android:text="12" />
+
+            <Button
+                android:id="@+id/estante13"
+                style="@style/EstanteButton"
+                android:text="13" />
+
+            <Button
+                android:id="@+id/estante14"
+                style="@style/EstanteButton"
+                android:text="14" />
+
+            <Button
+                android:id="@+id/estante15"
+                style="@style/EstanteButton"
+                android:text="15" />
+        </GridLayout>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

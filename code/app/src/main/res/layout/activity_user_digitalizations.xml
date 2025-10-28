@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@android:color/white">
+
+    <!-- Top Bar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/LoginArrowBack"
+            style="@style/ArrowBack"
+            app:srcCompat="@drawable/ic_arrow_back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Digitalizações"
+            android:textAlignment="center"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- Filter Chips -->
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:overScrollMode="never"
+        android:scrollbars="none"
+        android:layout_marginTop="12dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginEnd="8dp">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipEmFila"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:text="Em fila"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:chipBackgroundColor="@color/light_blue"
+                app:chipStrokeColor="@color/light_blue"
+                app:chipStrokeWidth="1dp"
+                android:textColor="@android:color/black"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipCancelado"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:text="Cancelado"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:chipBackgroundColor="@color/light_gray"
+                android:layout_marginStart="8dp"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipDigitalizando"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:text="Digitalizando"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:chipBackgroundColor="@color/light_yellow"
+                android:layout_marginStart="8dp"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipRecusada"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:text="Recusada"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:chipBackgroundColor="@color/light_red"
+                android:layout_marginStart="8dp"/>
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <!-- RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerDigitalizacoes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginTop="12dp"
+        android:clipToPadding="false" />
+
+    <!-- Search Bar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="4dp"
+        android:background="@drawable/search_background"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="12dp">
+
+        <EditText
+            android:id="@+id/searchEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Tecnologia"
+            android:background="@null"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:inputType="text" />
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_search"
+            android:contentDescription="Buscar" />
+    </LinearLayout>
+
+</LinearLayout>

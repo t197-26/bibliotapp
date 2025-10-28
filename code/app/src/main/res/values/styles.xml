@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="GreenText" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">#00FF00</item>
+    </style>
+
+    <style name="MenuButton" parent="@style/Widget.AppCompat.Button">
+        <item name="android:layout_width">100dp</item>
+        <item name="android:layout_height">100dp</item>
+        <item name="android:backgroundTint">@color/unifor.anil</item>
+        <item name="android:background">@drawable/bg_rounded_button</item>
+    </style>
+
+    <style name="BlueButton">
+        <item name="android:layout_width">320dp</item>
+        <item name="android:layout_height">56dp</item>
+        <item name="android:backgroundTint">@color/unifor.anil</item>
+    </style>
+
+    <style name="GreyButton">
+        <item name="android:layout_width">320dp</item>
+        <item name="android:layout_height">52dp</item>
+        <item name="android:backgroundTint">@color/unifor.azul_claro</item>
+        <item name="android:textColor">@color/unifor.marinho</item>
+    </style>
+
+    <style name="ArrowBack">
+        <item name="android:layout_width">40dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_marginStart">10dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:background">@drawable/bg_circle</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:scaleType">center</item>
+    </style>
+
+    <style name="SlotBase">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:layout_columnWeight">1</item>
+        <item name="android:layout_margin">4dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:backgroundTint">#4285F4</item>
+        <item name="android:background">@drawable/slot_background</item>
+    </style>
+
+    <style name="SlotDisponivel" parent="SlotBase">
+        <item name="android:backgroundTint">#4285F4</item>
+    </style>
+
+    <style name="SlotEscolhido" parent="SlotBase">
+        <item name="android:backgroundTint">#34A853</item>
+    </style>
+
+    <style name="SlotIndisponivel" parent="SlotBase">
+        <item name="android:backgroundTint">#C4C4C4</item>
+    </style>
+    <style name="EstanteButton">
+        <item name="android:layout_width">70dp</item>
+        <item name="android:layout_height">80dp</item>
+        <item name="android:layout_margin">6dp</item>
+        <item name="android:background">#000000</item>
+        <item name="android:textColor">#000000</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+
+</resources>

@@ -1,0 +1,92 @@
+package app.cincodev.bibliotapp
+
+import android.app.AlertDialog
+import android.content.Intent
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.PopupWindow
+import androidx.appcompat.app.AppCompatActivity
+
+class UserBookDetail : AppCompatActivity() {
+
+    lateinit var arrowBackButtonView: ImageButton
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_user_book_detail)
+
+        arrowBackButtonView = findViewById(R.id.userBookDetailArrowBack)
+        arrowBackButtonView.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
+
+        val bookExemplarMenu: ImageView = findViewById(R.id.bookExemplarMenu)
+
+        bookExemplarMenu.setOnClickListener {
+            showPopupMenu(bookExemplarMenu)
+        }
+    }
+
+    private fun showPopupMenu(anchorView: ImageView) {
+        // Inflate custom popup layout
+        val inflater = LayoutInflater.from(this)
+        val popupView = inflater.inflate(R.layout.custom_menu_exemplar, null)
+
+        // Create PopupWindow
+        val popupWindow = PopupWindow(
+            popupView,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            true // dismiss on outside touch
+        )
+
+        popupWindow.elevation = 16f // adds shadow
+
+        // Setup button listeners inside popup
+        popupView.findViewById<Button>(R.id.btnReservar).setOnClickListener {
+            confirmarReserva(context = this)
+            popupWindow.dismiss()
+        }
+
+        popupView.findViewById<Button>(R.id.btnDigitalizar).setOnClickListener {
+            popupWindow.dismiss()
+            startActivity(Intent(this, UserDigitalizationOrder::class.java))
+        }
+
+        popupView.findViewById<Button>(R.id.btnVerNoMapa).setOnClickListener {
+            popupWindow.dismiss()
+            startActivity(Intent(this, UserSpaceMap::class.java))
+        }
+
+        // Show the popup anchored to the menu button
+        // You can adjust offsets (x, y) as needed
+        popupWindow.showAsDropDown(anchorView, -150, -350)
+    }
+
+    private fun confirmarReserva(context: android.content.Context) {
+        val dialogView = LayoutInflater.from(context)
+            .inflate(R.layout.dialog_confirmation_reservation_book, null)
+
+        val dialog = AlertDialog.Builder(context)
+            .setView(dialogView)
+            .create()
+
+        val btnCancelar = dialogView.findViewById<Button>(R.id.btnCancelar)
+        val btnConfirmar = dialogView.findViewById<Button>(R.id.btnConfirmar)
+
+        btnCancelar.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        btnConfirmar.setOnClickListener {
+            startActivity(Intent(this, UserProcessingBooking::class.java))
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+}

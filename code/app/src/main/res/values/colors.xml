@@ -2,4 +2,22 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="wrong_red">#F42F17</color>
+    <color name="unifor.anil">#004AF7</color>
+    <color name="unifor.marinho">#132190</color>
+    <color name="unifor.azul_claro">#E4F2FE</color>
+    <color name="unifor.gelo">#87B7FE</color>
+    <color name="bibliotapp.button.text">@android:color/white</color>
+
+    <color name="status_in_queue">#FF6B00</color>
+    <color name="status_in_queue_bg">#FFF3E0</color>
+    <color name="status_in_queue_border">#FFE0B2</color>
+    <color name="status_cancelled">#757575</color>
+    <color name="status_cancelled_bg">#F5F5F5</color>
+    <color name="status_cancelled_border">#E0E0E0</color>
+
+    <color name="light_blue">#E0F2FF</color>
+    <color name="light_gray">#ECECEC</color>
+    <color name="light_yellow">#FFF9C4</color>
+    <color name="light_red">#FAD4D4</color>
 </resources>

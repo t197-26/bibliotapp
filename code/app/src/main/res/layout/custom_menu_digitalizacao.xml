@@ -1,0 +1,35 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/menuLayout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/menu_popup_bg"
+    android:orientation="vertical">
+
+    <android.widget.Button
+        android:id="@+id/btnFinalizar"
+        style="@style/MenuButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Finalizar" />
+
+    <android.widget.Button
+        android:id="@+id/btnRecusar"
+        style="@style/MenuButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Recusar" />
+
+    <android.widget.Button
+        android:id="@+id/btnIniciar"
+        style="@style/MenuButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Iniciar" />
+
+    <android.widget.Button
+        android:id="@+id/btnMapa"
+        style="@style/MenuButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ver no mapa" />
+</LinearLayout>

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="40dp"
+    tools:context=".ReserveSpace">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/LoginArrowBack"
+                style="@style/ArrowBack"
+                app:srcCompat="@drawable/ic_arrow_back"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Space
+                android:layout_width="16dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Espaços" />
+
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="16dp" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Data" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="20/09/2025" />
+
+            <ImageButton
+                android:id="@+id/imageButton2"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_weight="0"
+                android:contentDescription="Calendário"
+                app:srcCompat="@drawable/ic_calendar" />
+
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="16dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:text="Hora" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:text="08:00-22:00" />
+
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="16dp"
+            android:layout_weight="0" />
+
+        <Button
+            android:id="@+id/goToSelection"
+            style="@style/BlueButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:text="Ir para seleção" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="16dp"
+            android:layout_weight="0" />
+
+        <com.google.android.material.slider.RangeSlider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stepSize="10.0"
+            android:valueFrom="20.0"
+            android:valueTo="100.0"
+            app:values="@array/initial_range_slider_values" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="16dp"
+            android:layout_weight="0" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/reservaCartoes"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

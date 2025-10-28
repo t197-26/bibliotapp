@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AccountRegister">
+
+    <ImageButton
+        android:id="@+id/AccountRegisterArrowBack"
+        style="@style/ArrowBack"
+        app:srcCompat="@drawable/ic_arrow_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/AccountRegisterTitleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="160dp"
+        android:text="Criar conta"
+        android:textSize="36sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/AccountRegisterSubtitleTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="55dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="55dp"
+        android:text="Preencha os dados abaixo para ter acesso ao acervo da biblioteca"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/AccountRegisterTitleTextView" />
+
+    <EditText
+        android:id="@+id/AccountRegisterMatriculaEditText"
+        android:layout_width="230dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:ems="10"
+        android:hint="Matricula"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/AccountRegisterSubtitleTextView" />
+
+    <EditText
+        android:id="@+id/AccountRegisterFullNameEditText"
+        android:layout_width="230dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="Nome Completo"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/AccountRegisterMatriculaEditText" />
+
+    <EditText
+        android:id="@+id/AccountRegisterEmailEditText"
+        android:layout_width="230dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="Email"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/AccountRegisterFullNameEditText" />
+
+    <EditText
+        android:id="@+id/AccountRegisterPasswordEditText"
+        android:layout_width="230dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="Senha"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/AccountRegisterEmailEditText" />
+
+    <EditText
+        android:id="@+id/AccountRegisterPasswordConfirmationEditText"
+        android:layout_width="230dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="Confirme a senha"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/AccountRegisterPasswordEditText" />
+
+    <Switch
+        android:id="@+id/AccountRegisterAdministratorSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="É administrador?"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/AccountRegisterPasswordConfirmationEditText" />
+
+    <TextView
+        android:id="@+id/AccountRegisterMissingFieldsTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Todos os campos são obrigatórios."
+        android:textColor="@color/wrong_red"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/AccountRegisterRegisterButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/AccountRegisterAdministratorSwitch" />
+
+    <TextView
+        android:id="@+id/AccountRegisterPasswordNotMatchingTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="As senhas não são iguais."
+        android:textColor="@color/wrong_red"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/AccountRegisterRegisterButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/AccountRegisterAdministratorSwitch" />
+
+    <Button
+        android:id="@+id/AccountRegisterRegisterButton"
+        style="@style/BlueButton"
+        android:layout_marginTop="50dp"
+        android:text="Cadastrar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/AccountRegisterAdministratorSwitch" />
+</androidx.constraintlayout.widget.ConstraintLayout>
