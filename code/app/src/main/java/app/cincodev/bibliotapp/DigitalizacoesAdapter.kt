@@ -1,5 +1,7 @@
 package app.cincodev.bibliotapp
 
+import android.app.AlertDialog
+import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class DigitalizacoesAdapter(private val dataSet: Array<DigitalizacaoItem>) :
+class DigitalizacoesAdapter(private val context: Context, private val dataSet: Array<DigitalizacaoItem>) :
     RecyclerView.Adapter<DigitalizacoesAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -56,6 +58,23 @@ class DigitalizacoesAdapter(private val dataSet: Array<DigitalizacaoItem>) :
                 viewHolder.status.setBackgroundColor(Color.LTGRAY)
                 viewHolder.status.setTextColor(Color.BLACK)
             }
+        }
+
+        viewHolder.acao.setOnClickListener {
+            val builder = AlertDialog.Builder(context)
+            builder.setTitle("Cancelar Digitalização")
+            builder.setMessage("Ao cancelar, o seu pedido sai da fila de digitalização. Um novo pedido para o mesmo livro irá para o final da fila.")
+
+            builder.setPositiveButton("Confirmar") { dialog, _ ->
+                dialog.dismiss()
+            }
+
+            builder.setNegativeButton("Cancelar") { dialog, _ ->
+                dialog.dismiss()
+            }
+
+            val dialog = builder.create()
+            dialog.show()
         }
     }
 

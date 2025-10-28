@@ -126,4 +126,20 @@
             android:contentDescription="Buscar" />
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/AdminHomeBottomBarLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:gravity="center|top"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <ImageView
+            android:id="@+id/AdminHomeBottomBarHomeImageView"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/ic_home" />
+    </LinearLayout>
+
 </LinearLayout>

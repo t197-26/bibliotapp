@@ -58,7 +58,7 @@ class UserDigitalizations : AppCompatActivity() {
 
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerDigitalizacoes)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = DigitalizacoesAdapter(lista)
+        recyclerView.adapter = DigitalizacoesAdapter(this, lista)
 
         super.onStart()
     }
