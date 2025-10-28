@@ -154,7 +154,7 @@
         app:srcCompat="@drawable/ic_arrow_back" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/closeButtonAdminFee"
         android:layout_width="320dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="160dp"

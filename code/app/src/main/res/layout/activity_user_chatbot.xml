@@ -5,8 +5,9 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UserChatbot" >
+    tools:context=".UserChatbot">
 
+    <!-- Botão de voltar -->
     <ImageButton
         android:id="@+id/UserChatbotArrowBack"
         style="@style/ArrowBack"
@@ -17,6 +18,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_arrow_back" />
 
+    <!-- Título -->
     <TextView
         android:id="@+id/textView23"
         android:layout_width="wrap_content"
@@ -163,22 +165,22 @@
         android:id="@+id/layoutInput"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="8dp"
         android:background="@android:color/transparent"
         android:gravity="center_vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        android:orientation="horizontal"
+        android:padding="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/AdminHomeBottomBarLinearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="horizontal"
             android:background="@drawable/bg_input_chat"
-            android:padding="8dp"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="8dp">
 
             <EditText
                 android:id="@+id/inputMessage"
@@ -187,12 +189,12 @@
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
                 android:hint="Digite sua mensagem..."
-                android:textColor="#000"
-                android:textSize="16sp"
-                android:padding="8dp"
                 android:inputType="textCapSentences"
                 android:maxLines="3"
-                android:scrollbars="vertical" />
+                android:padding="8dp"
+                android:scrollbars="vertical"
+                android:textColor="#000"
+                android:textSize="16sp" />
         </LinearLayout>
 
         <ImageButton
@@ -201,9 +203,26 @@
             android:layout_height="48dp"
             android:layout_marginStart="8dp"
             android:background="@drawable/bg_btn_send_user_chat"
-            android:src="@drawable/ic_send_white"
             android:contentDescription="Enviar"
-            android:padding="8dp" />
+            android:padding="8dp"
+            android:src="@drawable/ic_send_white" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/AdminHomeBottomBarLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:gravity="center|top"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <ImageView
+            android:id="@+id/AdminHomeBottomBarHomeImageView"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/ic_home" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
