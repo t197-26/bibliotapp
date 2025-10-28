@@ -15,8 +15,8 @@ class UserBookSearch : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_book_search)
 
-        arrowBackButtonView = findViewById(R.id.UserBookSearchArrowBack)
-        arrowBackButtonView.setOnClickListener {
+        arrowBackButton = findViewById(R.id.UserBookSearchArrowBack)
+        arrowBackButton.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
     }
