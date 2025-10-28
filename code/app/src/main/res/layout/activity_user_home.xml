@@ -11,7 +11,9 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        android:paddingBottom="88dp">
 
         <LinearLayout
             android:id="@+id/telaHomeAdmin"
@@ -109,11 +111,29 @@
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         android:src="@drawable/ic_chatbot"
-        app:tint="@android:color/white"
-        app:borderWidth="16dp"
         app:backgroundTint="@color/unifor.anil"
-        android:layout_gravity="bottom|end" />
+        app:borderWidth="16dp"
+        app:tint="@android:color/white" />
+
+    <!-- Navbar fixed at bottom -->
+    <LinearLayout
+        android:id="@+id/navbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/white"
+        android:gravity="center"
+        android:padding="16dp">
+
+        <ImageView
+            android:id="@+id/navIcon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/ic_home" />
+    </LinearLayout>
 
 </FrameLayout>
