@@ -7,29 +7,155 @@
     android:layout_height="match_parent"
     tools:context=".AdminEditExemplar">
 
+    <!-- Top Section -->
     <LinearLayout
-        android:layout_width="0dp"
+        android:id="@+id/topSection"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/buttonsSection">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/adminEditExemplarArrowBack"
+                style="@style/ArrowBack"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_margin="8dp"
+                app:srcCompat="@drawable/ic_arrow_back" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Exemplar"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_book_details"
+            android:padding="8dp"
+            android:layout_margin="8dp">
+
+            <TableRow>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:text="Registro"
+                        android:textStyle="bold"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <EditText
+                        android:id="@+id/bookMaterial"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="123456" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:text="Ano"
+                        android:textStyle="bold"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <EditText
+                        android:id="@+id/materialIdioma"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="2003" />
+                </LinearLayout>
+            </TableRow>
+
+            <TableRow>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:text="Situação"
+                        android:textStyle="bold"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <EditText
+                        android:id="@+id/bookCDU"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Cativo" />
+                </LinearLayout>
+            </TableRow>
+        </TableLayout>
+    </LinearLayout>
+
+    <!-- Buttons just above navbar -->
+    <LinearLayout
+        android:id="@+id/buttonsSection"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:orientation="vertical"
+        android:paddingHorizontal="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/navbar">
 
-        <ImageButton
-            style="@style/ArrowBack"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_margin="8dp"
-            app:srcCompat="@drawable/ic_arrow_back" />
+        <Button
+            android:id="@+id/btn_salvar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/unifor.anil"
+            android:text="Salvar"
+            android:elevation="2dp"
+            app:cornerRadius="10dp" />
 
-        <TextView
+        <Button
+            android:id="@+id/btn_descartar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#A29F9F"
+            android:text="Descartar"
+            app:cornerRadius="10dp" />
+
+        <Button
+            android:id="@+id/btn_aposentar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/wrong_red"
+            android:text="Aposentar"
+            app:cornerRadius="10dp" />
+    </LinearLayout>
+
+    <!-- Navbar fixed at bottom -->
+    <LinearLayout
+        android:id="@+id/navbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <ImageView
+            android:id="@+id/navIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Exemplar"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-
+            app:srcCompat="@drawable/ic_home"/>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
