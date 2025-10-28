@@ -52,7 +52,7 @@ class UserHome : AppCompatActivity() {
     }
 
     private fun openReservarEspaco() {
-        val intent = Intent(this, UserSpaceBooking::class.java)
+        val intent = Intent(this, ReserveSpace::class.java)
         startActivity(intent)
     }
 
