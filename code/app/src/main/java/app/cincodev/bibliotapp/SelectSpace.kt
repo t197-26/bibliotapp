@@ -2,6 +2,7 @@ package app.cincodev.bibliotapp
 
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
@@ -10,6 +11,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
 class SelectSpace : AppCompatActivity() {
+    lateinit var arrowBackButtonView: ImageButton
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -25,6 +28,15 @@ class SelectSpace : AppCompatActivity() {
         btnReservar.setOnClickListener {
             showConfirmationDialog()
         }
+    }
+
+    override fun onStart() {
+        arrowBackButtonView = findViewById(R.id.LoginArrowBack)
+        arrowBackButtonView.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
+
+        super.onStart()
     }
 
     private fun showConfirmationDialog() {

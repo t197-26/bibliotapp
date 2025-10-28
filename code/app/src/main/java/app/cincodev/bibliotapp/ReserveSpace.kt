@@ -1,11 +1,16 @@
 package app.cincodev.bibliotapp
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
+import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 class ReserveSpace : AppCompatActivity() {
+    lateinit var arrowBackButtonView: ImageButton
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reserve_space)
@@ -29,5 +34,20 @@ class ReserveSpace : AppCompatActivity() {
         recyclerView.adapter = customAdapter
 
 
+    }
+
+    override fun onStart() {
+        arrowBackButtonView = findViewById(R.id.LoginArrowBack)
+        arrowBackButtonView.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
+
+        val goToSelectionButton = findViewById<Button>(R.id.goToSelection)
+
+        goToSelectionButton.setOnClickListener {
+            startActivity(Intent(this, SelectSpace::class.java))
+        }
+
+        super.onStart()
     }
 }

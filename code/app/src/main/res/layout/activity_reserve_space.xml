@@ -26,12 +26,10 @@
 
             <ImageButton
                 android:id="@+id/LoginArrowBack"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:background="@drawable/bg_circle"
+                style="@style/ArrowBack"
+                app:srcCompat="@drawable/ic_arrow_back"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_arrow_back" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <Space
                 android:layout_width="16dp"
@@ -116,7 +114,7 @@
             android:layout_weight="0" />
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/goToSelection"
             style="@style/BlueButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

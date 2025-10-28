@@ -12,7 +12,7 @@
         android:layout_marginTop="1dp"
         android:layout_marginEnd="1dp"
         android:layout_marginBottom="1dp"
-        android:gravity="center|top"
+        android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -34,9 +34,9 @@
             android:layout_weight="0" />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="0"
+            android:layout_weight="1"
             android:gravity="center_vertical"
             android:orientation="vertical">
 
@@ -58,5 +58,15 @@
                 android:layout_height="wrap_content"
                 android:text="TextView" />
         </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/imageButton5"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="0"
+            android:backgroundTint="#00FFFFFF"
+            android:contentDescription="Cancelar"
+            app:srcCompat="@drawable/x" />
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
