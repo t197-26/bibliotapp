@@ -12,6 +12,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Bibliotapp">
         <activity
+            android:name=".AdminEditExemplar"
+            android:exported="false" />
+        <activity
+            android:name=".SelectSpace"
+            android:exported="false" />
+        <activity
+            android:name=".ReserveSpace"
+            android:exported="false" />
+        <activity
             android:name=".AdminSpaceBookingSearch"
             android:exported="false" />
         <activity

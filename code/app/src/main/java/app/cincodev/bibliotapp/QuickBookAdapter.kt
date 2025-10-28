@@ -1,5 +1,6 @@
 package app.cincodev.bibliotapp
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,6 +28,13 @@ class QuickBookAdapter(private val dataSet: Array<QuickBook>) :
         viewHolder.capa.setImageResource(dataSet[position].capa)
         viewHolder.titulo.text = dataSet[position].titulo
         viewHolder.devolucao.text = dataSet[position].devolucao
+
+        viewHolder.itemView.setOnClickListener {
+            val context = viewHolder.itemView.context
+            val intent = Intent(context, UserBookDetail::class.java)
+
+            context.startActivity(intent)
+        }
     }
 
     override fun getItemCount() = dataSet.size

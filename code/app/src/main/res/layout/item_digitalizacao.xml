@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    android:layout_marginHorizontal="4dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="2dp"
+    android:foreground="?attr/selectableItemBackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp">
+
+        <!-- Book Cover -->
+        <ImageView
+            android:id="@+id/imgCover"
+            android:layout_width="60dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center_vertical"
+            android:scaleType="centerCrop"
+            android:src="@drawable/book_01"
+            android:background="@drawable/image_border"
+            android:contentDescription="Imagem do livro" />
+
+        <!-- Book Details -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="8dp">
+
+            <TextView
+                android:id="@+id/txtTitulo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="A Revolução Informacional [Impresso]"
+                android:textStyle="bold"
+                android:textColor="@android:color/black"
+                android:textSize="14sp"
+                android:maxLines="2"
+                android:ellipsize="end" />
+
+            <TextView
+                android:id="@+id/txtData"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pedido em: 20/09/2025"
+                android:textColor="#666666"
+                android:textSize="12sp"
+                android:layout_marginTop="2dp" />
+
+            <TextView
+                android:id="@+id/txtPaginas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Páginas: 10, 11, 25-30, 32, 45-50"
+                android:textColor="#666666"
+                android:textSize="12sp"
+                android:layout_marginTop="1dp" />
+
+            <!-- Status Chip -->
+            <TextView
+                android:id="@+id/txtStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="4dp"
+                android:text="Em fila"
+                android:textSize="12sp"
+                android:textColor="@android:color/white"
+                android:background="@drawable/status_chip_background" />
+        </LinearLayout>
+
+        <!-- Optional Action Icon (e.g. X for cancel) -->
+        <ImageView
+            android:id="@+id/imgAction"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/x"
+            android:contentDescription="Fechar"
+            android:layout_gravity="top"
+            android:layout_marginStart="6dp" />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

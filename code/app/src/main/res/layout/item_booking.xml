@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:layout_marginHorizontal="12dp"
+    android:layout_marginVertical="8dp"
+    android:background="@drawable/bg_item_booking"
+    android:elevation="4dp"
+    android:gravity="center_vertical">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvRequisitante"
+            android:textStyle="bold"
+            android:textColor="#212121"
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Requisitante: 2420382" />
+
+        <TextView
+            android:id="@+id/tvLocal"
+            android:textColor="#424242"
+            android:textSize="14sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Local: C10" />
+
+        <TextView
+            android:id="@+id/tvCheckIn"
+            android:textColor="#424242"
+            android:textSize="14sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Check-in: 22/09/2025 08:00" />
+
+        <TextView
+            android:id="@+id/tvCheckOut"
+            android:textColor="#424242"
+            android:textSize="14sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Check-out: 22/09/2025 10:00" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/btnExcluir"
+        android:src="@android:drawable/ic_menu_close_clear_cancel"
+        android:tint="#B71C1C"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="8dp"
+        tools:ignore="UseAppTint" />
+
+</LinearLayout>
