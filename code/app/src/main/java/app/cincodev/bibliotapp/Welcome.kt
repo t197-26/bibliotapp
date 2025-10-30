@@ -15,7 +15,7 @@ class Welcome : AppCompatActivity() {
 
         loginButton = findViewById(R.id.welcomeLoginButton)
         loginButton.setOnClickListener {
-            startActivity(Intent(this@Welcome, Login::class.java))
+            startActivity(Intent(this@Welcome, LoginActivity::class.java))
         }
 
         registerAccountButton = findViewById(R.id.welcomeRegisterAccountButton)
