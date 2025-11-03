@@ -7,7 +7,7 @@ import android.widget.EditText
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 
-class Login : AppCompatActivity() {
+class LoginActivity : AppCompatActivity() {
     lateinit var arrowBackButtonView: ImageButton
     lateinit var AccessButton: Button
     lateinit var ForgetPasswordButton: Button
