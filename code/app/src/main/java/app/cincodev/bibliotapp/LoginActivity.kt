@@ -8,23 +8,19 @@ import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 
 class LoginActivity : AppCompatActivity() {
-    lateinit var arrowBackButtonView: ImageButton
-    lateinit var AccessButton: Button
-    lateinit var ForgetPasswordButton: Button
-    lateinit var matriculaEditText : EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        matriculaEditText = findViewById(R.id.LoginMatriculaEditText)
+        val matriculaEditText = findViewById<EditText>(R.id.LoginMatriculaEditText)
 
-        arrowBackButtonView = findViewById(R.id.LoginArrowBack)
+        val arrowBackButtonView = findViewById<ImageButton>(R.id.LoginArrowBack)
         arrowBackButtonView.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
 
-        AccessButton = findViewById(R.id.LoginAccessButton)
+        val AccessButton = findViewById<Button>(R.id.LoginAccessButton)
         AccessButton.setOnClickListener {
             if (matriculaEditText.text.toString()[0] == '7') {
                 startActivity(Intent(this, AdminHome::class.java))
@@ -33,8 +29,8 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-        AccessButton = findViewById(R.id.LoginForgetPasswordButton)
-        AccessButton.setOnClickListener {
+        val loginForgetPasswordButton = findViewById<Button>(R.id.LoginForgetPasswordButton)
+        loginForgetPasswordButton.setOnClickListener {
             startActivity(Intent(this, ForgetPassword::class.java))
         }
     }
