@@ -51,4 +51,5 @@ dependencies {
     implementation("com.google.android.material:material:1.11.0")
     implementation("com.google.firebase:firebase-firestore-ktx:25.1.4")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.8.0")
+    implementation("com.google.ai.client.generativeai:generativeai:0.9.0")
 }
