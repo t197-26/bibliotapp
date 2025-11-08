@@ -51,7 +51,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="4dp"
-                    android:text="Sistemas de informacoes e decisoes gerenciais na era da Internet"
+                    android:text=""
                     android:textColor="@color/black"
                     android:textSize="24sp" />
 
@@ -82,7 +82,7 @@
                                 android:id="@+id/bookMaterial"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Livro" />
+                                android:text="" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -99,10 +99,10 @@
                                 android:textStyle="bold" />
 
                             <TextView
-                                android:id="@+id/materialIdioma"
+                                android:id="@+id/bookIdioma"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Português" />
+                                android:text="" />
                         </LinearLayout>
 
                     </TableRow>
@@ -128,7 +128,7 @@
                                 android:id="@+id/bookISBN"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="85-02-77.84" />
+                                android:text="" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -148,7 +148,7 @@
                                 android:id="@+id/bookAutor"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="O'Brien, James A." />
+                                android:text="" />
                         </LinearLayout>
 
                     </TableRow>
@@ -174,7 +174,7 @@
                                 android:id="@+id/bookCDU"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="658.5 M366a" />
+                                android:text="" />
                         </LinearLayout>
                     </TableRow>
 
@@ -199,7 +199,7 @@
                                 android:id="@+id/bookEdicao"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="3" />
+                                android:text="" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -216,10 +216,10 @@
                                 android:textStyle="bold" />
 
                             <TextView
-                                android:id="@+id/textView17"
+                                android:id="@+id/bookPublicacao"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="São Paulo" />
+                                android:text="" />
                         </LinearLayout>
                     </TableRow>
                 </TableLayout>

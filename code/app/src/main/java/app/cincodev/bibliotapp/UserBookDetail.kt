@@ -9,27 +9,83 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.PopupWindow
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 class UserBookDetail : AppCompatActivity() {
 
     lateinit var arrowBackButtonView: ImageButton
 
+    // Firebase
+    lateinit var fb:FirebaseFirestore
+
+    // Campos do detalhamento de material
+    lateinit var etBookTitle: TextView
+    lateinit var etBookMaterial: TextView
+    lateinit var bookIdioma: TextView
+    lateinit var bookISBN: TextView
+    lateinit var bookAutor: TextView
+    lateinit var bookCDU: TextView
+    lateinit var bookEdicao: TextView
+    lateinit var bookPublicacao: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_book_detail)
+
+        // Instância do Firebase
+        fb = Firebase.firestore
+
+        // Campos de detalhamento de material
+        etBookTitle = findViewById(R.id.bookTitle)
+        etBookMaterial = findViewById(R.id.bookMaterial)
+        bookIdioma = findViewById(R.id.bookIdioma)
+        bookISBN = findViewById(R.id.bookISBN)
+        bookAutor = findViewById(R.id.bookAutor)
+        bookCDU = findViewById(R.id.bookCDU)
+        bookEdicao = findViewById(R.id.bookEdicao)
+        bookPublicacao = findViewById(R.id.bookPublicacao)
 
         arrowBackButtonView = findViewById(R.id.userBookDetailArrowBack)
         arrowBackButtonView.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
 
+        // Chamada dos detalhes do material
+        getBookDetails();
+
         val bookExemplarMenu: ImageView = findViewById(R.id.bookExemplarMenu)
+
 
         bookExemplarMenu.setOnClickListener {
             showPopupMenu(bookExemplarMenu)
         }
+
     }
+
+    // Função para chamada da informações
+    private fun getBookDetails() {
+
+        fb.collection("materiais")
+            .document("default")
+            .get()
+            .addOnSuccessListener { result ->
+
+                etBookTitle.setText(result.get("titulo").toString())
+                etBookMaterial.setText(result.get("material").toString())
+                bookIdioma.setText(result.get("idioma").toString())
+                bookISBN.setText(result.get("isbn").toString())
+                bookAutor.setText(result.get("autor").toString())
+                bookCDU.setText(result.get("cdu").toString())
+                bookEdicao.setText(result.get("edicao").toString())
+                bookPublicacao.setText(result.get("publicacao").toString())
+
+            }
+    }
+
 
     private fun showPopupMenu(anchorView: ImageView) {
         // Inflate custom popup layout
