@@ -1,15 +1,12 @@
 package app.cincodev.bibliotapp
 
-import android.app.AlertDialog
-import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
-import android.widget.PopupWindow
 import android.widget.TextView
+import android.util.Base64
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -25,6 +22,7 @@ class UserBookDetail : AppCompatActivity() {
     lateinit var fb:FirebaseFirestore
 
     // Campos do detalhamento de material
+    lateinit var bookCapa: ImageView
     lateinit var etBookTitle: TextView
     lateinit var etBookMaterial: TextView
     lateinit var bookIdioma: TextView
@@ -50,6 +48,7 @@ class UserBookDetail : AppCompatActivity() {
         bookCDU = findViewById(R.id.bookCDU)
         bookEdicao = findViewById(R.id.bookEdicao)
         bookPublicacao = findViewById(R.id.bookPublicacao)
+        bookCapa = findViewById(R.id.bookCover)
 
         arrowBackButtonView = findViewById(R.id.userBookDetailArrowBack)
         arrowBackButtonView.setOnClickListener {
@@ -57,40 +56,69 @@ class UserBookDetail : AppCompatActivity() {
         }
 
         // Chamada dos detalhes do material
-        getBookDetails();
+        getBookDetails("default")
 
-        val exemplares = mutableListOf<Exemplar>(
-            Exemplar("Impresso", "235711", "Em 5 dia(s)", "Emprestado"),
-            Exemplar("Digital", "998877", "Imediata", "Disponível"),
-            Exemplar("Impresso", "112233", "Indisponível", "Indisponível"),
-            Exemplar("Impresso", "556644", "Consultar balcão", "Emprestado"),
-            Exemplar("Impresso", "774411", "Em 1 dia(s)", "Disponível"),
-            Exemplar("Digital", "889900", "Indisponível", "Indisponível")
-        )
+        val exemplares = mutableListOf<Exemplar>()
 
         val recyclerView = findViewById<RecyclerView>(R.id.exemplaresRecyler)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = ExemplaresAdapter(this, exemplares)
 
+        // Chamada de exemplares
+        loadExemplares("default", exemplares, recyclerView)
+
     }
 
     // Função para chamada da informações
-    private fun getBookDetails() {
+    private fun getBookDetails(bookId:String) {
 
         fb.collection("materiais")
-            .document("default")
+            .document(bookId)
             .get()
             .addOnSuccessListener { result ->
+                etBookTitle.text = result.get("titulo").toString()
+                etBookMaterial.text = result.get("material").toString()
+                bookIdioma.text = result.get("idioma").toString()
+                bookISBN.text = result.get("isbn").toString()
+                bookAutor.text = result.get("autor").toString()
+                bookCDU.text = result.get("cdu").toString()
+                bookEdicao.text = result.get("edicao").toString()
+                bookPublicacao.text = result.get("publicacao").toString()
 
-                etBookTitle.setText(result.get("titulo").toString())
-                etBookMaterial.setText(result.get("material").toString())
-                bookIdioma.setText(result.get("idioma").toString())
-                bookISBN.setText(result.get("isbn").toString())
-                bookAutor.setText(result.get("autor").toString())
-                bookCDU.setText(result.get("cdu").toString())
-                bookEdicao.setText(result.get("edicao").toString())
-                bookPublicacao.setText(result.get("publicacao").toString())
-
+                val capaBase64 = result.get("capa") as? String
+                if (capaBase64 != null && capaBase64.isNotEmpty()) {
+                    val bitmap = decodeBase64ToBitmap(capaBase64)
+                    if (bitmap != null) {
+                        bookCapa.setImageBitmap(bitmap)
+                    }
+                }
             }
     }
+    private fun loadExemplares(bookId: String, exemplares: MutableList<Exemplar>, recycler: RecyclerView) {
+        fb.collection("materiais")
+            .document(bookId)
+            .collection("exemplares")
+            .get()
+            .addOnSuccessListener { snapshot ->
+                exemplares.clear()
+                for (doc in snapshot) {
+                    val suporte = doc.getString("suporte") ?: ""
+                    val registro = doc.getString("registro") ?: ""
+                    val disponibilidade = doc.getString("disponibilidade") ?: ""
+                    val status = doc.getString("status") ?: ""
+                    exemplares.add(Exemplar(suporte, registro, disponibilidade, status))
+                }
+            }
+    }
+
+    private fun decodeBase64ToBitmap(base64String: String): Bitmap? {
+        return try {
+            val decodedBytes = Base64.decode(base64String, Base64.DEFAULT)
+            BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
 }
