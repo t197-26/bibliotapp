@@ -11,6 +11,8 @@ import android.widget.ImageView
 import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -57,12 +59,18 @@ class UserBookDetail : AppCompatActivity() {
         // Chamada dos detalhes do material
         getBookDetails();
 
-        val bookExemplarMenu: ImageView = findViewById(R.id.bookExemplarMenu)
+        val exemplares = arrayOf(
+            Exemplar("Impresso", "235711", "Em 5 dia(s)", "Emprestado"),
+            Exemplar("Digital", "998877", "Imediata", "Disponível"),
+            Exemplar("Impresso", "112233", "Indisponível", "Indisponível"),
+            Exemplar("Impresso", "556644", "Consultar balcão", "Emprestado"),
+            Exemplar("Impresso", "774411", "Em 1 dia(s)", "Disponível"),
+            Exemplar("Digital", "889900", "Indisponível", "Indisponível")
+        )
 
-
-        bookExemplarMenu.setOnClickListener {
-            showPopupMenu(bookExemplarMenu)
-        }
+        val recyclerView = findViewById<RecyclerView>(R.id.exemplaresRecyler)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = ExemplaresAdapter(this, exemplares)
 
     }
 
@@ -84,65 +92,5 @@ class UserBookDetail : AppCompatActivity() {
                 bookPublicacao.setText(result.get("publicacao").toString())
 
             }
-    }
-
-
-    private fun showPopupMenu(anchorView: ImageView) {
-        // Inflate custom popup layout
-        val inflater = LayoutInflater.from(this)
-        val popupView = inflater.inflate(R.layout.custom_menu_exemplar, null)
-
-        // Create PopupWindow
-        val popupWindow = PopupWindow(
-            popupView,
-            ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT,
-            true // dismiss on outside touch
-        )
-
-        popupWindow.elevation = 16f // adds shadow
-
-        // Setup button listeners inside popup
-        popupView.findViewById<Button>(R.id.btnReservar).setOnClickListener {
-            confirmarReserva(context = this)
-            popupWindow.dismiss()
-        }
-
-        popupView.findViewById<Button>(R.id.btnDigitalizar).setOnClickListener {
-            popupWindow.dismiss()
-            startActivity(Intent(this, UserDigitalizationOrder::class.java))
-        }
-
-        popupView.findViewById<Button>(R.id.btnVerNoMapa).setOnClickListener {
-            popupWindow.dismiss()
-            startActivity(Intent(this, UserSpaceMap::class.java))
-        }
-
-        // Show the popup anchored to the menu button
-        // You can adjust offsets (x, y) as needed
-        popupWindow.showAsDropDown(anchorView, -150, -350)
-    }
-
-    private fun confirmarReserva(context: android.content.Context) {
-        val dialogView = LayoutInflater.from(context)
-            .inflate(R.layout.dialog_confirmation_reservation_book, null)
-
-        val dialog = AlertDialog.Builder(context)
-            .setView(dialogView)
-            .create()
-
-        val btnCancelar = dialogView.findViewById<Button>(R.id.btnCancelar)
-        val btnConfirmar = dialogView.findViewById<Button>(R.id.btnConfirmar)
-
-        btnCancelar.setOnClickListener {
-            dialog.dismiss()
-        }
-
-        btnConfirmar.setOnClickListener {
-            startActivity(Intent(this, UserProcessingBooking::class.java))
-            dialog.dismiss()
-        }
-
-        dialog.show()
     }
 }
