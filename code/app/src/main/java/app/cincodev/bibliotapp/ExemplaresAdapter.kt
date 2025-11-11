@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 class ExemplaresAdapter(
     private val context: Context,
-    private val exemplares: Array<Exemplar>
+    private val exemplares: List<Exemplar>
 ) : RecyclerView.Adapter<ExemplaresAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {

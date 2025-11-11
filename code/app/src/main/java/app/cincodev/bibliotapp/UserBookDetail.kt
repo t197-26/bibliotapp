@@ -59,7 +59,7 @@ class UserBookDetail : AppCompatActivity() {
         // Chamada dos detalhes do material
         getBookDetails();
 
-        val exemplares = arrayOf(
+        val exemplares = mutableListOf<Exemplar>(
             Exemplar("Impresso", "235711", "Em 5 dia(s)", "Emprestado"),
             Exemplar("Digital", "998877", "Imediata", "Disponível"),
             Exemplar("Impresso", "112233", "Indisponível", "Indisponível"),
