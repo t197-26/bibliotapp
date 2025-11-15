@@ -1,5 +1,6 @@
 package app.cincodev.bibliotapp
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -31,7 +32,7 @@ class UserBookDetail : AppCompatActivity() {
     lateinit var bookCDU: TextView
     lateinit var bookEdicao: TextView
     lateinit var bookPublicacao: TextView
-
+    lateinit var recyclerView: RecyclerView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_book_detail)
@@ -52,20 +53,23 @@ class UserBookDetail : AppCompatActivity() {
 
         arrowBackButtonView = findViewById(R.id.userBookDetailArrowBack)
         arrowBackButtonView.setOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
+            startActivity(Intent(this, UserHome::class.java))
         }
 
+        val x = getSharedPreferences("arquivo", MODE_PRIVATE)
+        val bookId = x.getString("BOOK_ID", "default") ?: "default"
+
         // Chamada dos detalhes do material
-        getBookDetails("default")
+        getBookDetails(bookId)
 
         val exemplares = mutableListOf<Exemplar>()
 
-        val recyclerView = findViewById<RecyclerView>(R.id.exemplaresRecyler)
+        recyclerView = findViewById<RecyclerView>(R.id.exemplaresRecyler)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = ExemplaresAdapter(this, exemplares)
 
         // Chamada de exemplares
-        loadExemplares("default", exemplares, recyclerView)
+        loadExemplares(bookId, exemplares, recyclerView)
 
     }
 
@@ -102,12 +106,14 @@ class UserBookDetail : AppCompatActivity() {
             .addOnSuccessListener { snapshot ->
                 exemplares.clear()
                 for (doc in snapshot) {
+                    val id = doc.id
                     val suporte = doc.getString("suporte") ?: ""
                     val registro = doc.getString("registro") ?: ""
                     val disponibilidade = doc.getString("disponibilidade") ?: ""
                     val status = doc.getString("status") ?: ""
-                    exemplares.add(Exemplar(suporte, registro, disponibilidade, status))
+                    exemplares.add(Exemplar(id, suporte, registro, disponibilidade, status))
                 }
+                recyclerView.adapter?.notifyDataSetChanged()
             }
     }
 

@@ -2,11 +2,13 @@ package app.cincodev.bibliotapp
 
 import android.app.AlertDialog
 import android.content.Context
+import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.content.edit
 import androidx.recyclerview.widget.RecyclerView
 
 class ExemplaresAdapter(
@@ -90,9 +92,14 @@ class ExemplaresAdapter(
         }
 
         btnConfirmar.setOnClickListener {
+
+            val x = context.getSharedPreferences("arquivo",MODE_PRIVATE)
+            x.edit {
+                putString("EXEMPLAR_ID", exemplares[position].id)
+            }
+
             context.startActivity(Intent(context, UserProcessingBooking::class.java))
-            exemplares[position].status = "Emprestado"
-            notifyItemChanged(position)
+
             dialog.dismiss()
         }
 
