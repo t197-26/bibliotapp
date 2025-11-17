@@ -10,7 +10,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
@@ -54,69 +54,94 @@ class AccountRegister : AppCompatActivity() {
         registerButton.setOnClickListener {
             missingFieldsTextView.visibility = View.INVISIBLE
             passwordNotMatchingTextView.visibility = View.INVISIBLE
-            if (
-                matriculaEditText.text.toString().isEmpty()
-                || fullNameEditText.text.toString().isEmpty()
-                || emailEditText.text.toString().isEmpty()
-                || passwordEditText.text.toString().isEmpty()
-                || passwordConfirmationEditText.text.toString().isEmpty()) {
 
-                missingFieldsTextView.visibility = View.VISIBLE
-
-            } else if (passwordEditText.text.toString() != passwordConfirmationEditText.text.toString()) {
-
-                passwordNotMatchingTextView.visibility = View.VISIBLE
-
-            } else {
-                lifecycleScope.launch {
-                    userWrite(
-                        db = db,
-                        id = matriculaEditText.text.toString(),
-                        name = fullNameEditText.text.toString(),
-                        email = emailEditText.text.toString(),
-                        password = passwordEditText.text.toString()
+            val missingField = (
+                    matriculaEditText.text.toString().isEmpty()
+                            || fullNameEditText.text.toString().isEmpty()
+                            || emailEditText.text.toString().isEmpty()
+                            || passwordEditText.text.toString().isEmpty()
+                            || passwordConfirmationEditText.text.toString().isEmpty()
                     )
+
+            val mismatchedPassword = (
+                    passwordEditText.text.toString()
+                            != passwordConfirmationEditText.text.toString()
+                    )
+
+            if (missingField) { missingFieldsTextView.visibility = View.VISIBLE }
+            else if (mismatchedPassword) { passwordNotMatchingTextView.visibility = View.VISIBLE }
+            else {
+                val docRef = db.collection("users")
+                    .document(matriculaEditText.text.toString())
+
+                lifecycleScope.launch {
+                    val document = docRef.get().await()
+                    if (document.exists()) {
+                        inflateCancelPopup()
+                    } else {
+                        userWrite(
+                            docRef = docRef,
+                            name = fullNameEditText.text.toString(),
+                            email = emailEditText.text.toString(),
+                            password = passwordEditText.text.toString()
+                        )
+
+                        inflateConfirmationPopup()
+                    }
                 }
-
-                val dialogView = layoutInflater.inflate(R.layout.dialog_confirmation_user_register, null)
-
-                val dialog = AlertDialog.Builder(this)
-                    .setView(dialogView)
-                    .create()
-
-                val btnHome = dialogView.findViewById<Button>(R.id.btnHome)
-
-                btnHome.setOnClickListener {
-                    dialog.dismiss()
-                    startActivity(Intent(this, Welcome::class.java))
-                }
-
-                dialog.show()
             }
         }
     }
 
-    suspend fun userWrite(
-        db : FirebaseFirestore,
-        id : String,
+    fun inflateCancelPopup() {
+        val dialogView =
+            layoutInflater.inflate(R.layout.dialog_cancel_user_register, null)
+
+        val dialog = AlertDialog.Builder(this@AccountRegister)
+            .setView(dialogView)
+            .create()
+
+        val btnHome = dialogView.findViewById<Button>(R.id.btnHome)
+
+        btnHome.setOnClickListener {
+            startActivity(Intent(this, LoginActivity::class.java))
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
+    fun inflateConfirmationPopup() {
+        val dialogView =
+            layoutInflater.inflate(R.layout.dialog_confirmation_user_register, null)
+
+        val dialog = AlertDialog.Builder(this@AccountRegister)
+            .setView(dialogView)
+            .create()
+
+        val btnHome = dialogView.findViewById<Button>(R.id.btnHome)
+
+        btnHome.setOnClickListener {
+            startActivity(Intent(this, LoginActivity::class.java))
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
+     suspend fun userWrite(
+        docRef : DocumentReference,
         name : String,
         email : String,
         password : String
     ) {
-        val data = mapOf(
-            "name" to name,
-            "email" to email,
-            "password" to password
-        )
+         val data = mapOf(
+             "name" to name,
+             "email" to email,
+             "password" to password,
+             "created_at" to System.currentTimeMillis()
+         )
 
-        db.collection("users").document(id)
-            .set(data)
-            .addOnSuccessListener {
-                println("Documento salvo com ID: $id")
-            }
-            .addOnFailureListener { e ->
-                println("Erro ao salvar documento: ${e.message}")
-            }
-            .await()
+         docRef.set(data).await()
     }
 }
