@@ -16,9 +16,8 @@ class UserChatbot : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var inputMessage: EditText
-    private lateinit var btnSend: Button
+    private lateinit var btnSend: ImageButton
     private lateinit var arrowBackButton: ImageButton
-    private lateinit var navbarHome: ImageView
     private lateinit var generative: GenerativeModel
     private lateinit var chatAdapter: ChatAdapter
     private val messages = mutableListOf<Message>()
@@ -31,7 +30,6 @@ class UserChatbot : AppCompatActivity() {
         inputMessage = findViewById(R.id.inputMessage)
         btnSend = findViewById(R.id.btnSend)
         arrowBackButton = findViewById(R.id.UserChatbotArrowBack)
-        navbarHome = findViewById(R.id.AdminHomeBottomBarHomeImageView)
 
         recyclerView.layoutManager = LinearLayoutManager(this)
         chatAdapter = ChatAdapter(messages)
@@ -46,9 +44,6 @@ class UserChatbot : AppCompatActivity() {
             onBackPressedDispatcher.onBackPressed()
         }
 
-        navbarHome.setOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
-        }
 
         btnSend.setOnClickListener {
             val userInput = inputMessage.text.toString().trim()
@@ -57,9 +52,14 @@ class UserChatbot : AppCompatActivity() {
                 inputMessage.text.clear()
 
                 lifecycleScope.launch {
-                    val response = generative.generateContent(userInput)
-                    val reply = response.text ?: "Desculpe, não consegui responder agora."
-                    addMessage(reply, false)
+                    try {
+                        val response = generative.generateContent(userInput)
+                        val reply = response.text ?: "Sem resposta."
+                        addMessage(reply, false)
+
+                    } catch (e: Exception) {
+                        addMessage("Erro: ${e.message}", false)
+                    }
                 }
             }
         }

@@ -52,13 +52,14 @@
         android:id="@+id/layoutInput"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:padding="8dp"
-        android:background="@android:color/transparent"
-        app:layout_constraintBottom_toTopOf="@id/AdminHomeBottomBarLinearLayout"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        tools:layout_editor_absoluteY="602dp">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -95,21 +96,5 @@
             android:src="@drawable/ic_send_white" />
     </LinearLayout>
 
-
-    <LinearLayout
-        android:id="@+id/AdminHomeBottomBarLinearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:gravity="center|top"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <ImageView
-            android:id="@+id/AdminHomeBottomBarHomeImageView"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/ic_home" />
-    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
