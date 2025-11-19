@@ -31,24 +31,32 @@ class UserDigitalizations : AppCompatActivity() {
 
         val lista = arrayOf(
             DigitalizacaoItem(
+                id = "92hfofofdf",
+                material_id="default",
                 registro = "A Revolução Informacional [Impresso]",
                 paginas = "30-40",
                 status = "Digitalizando",
                 requisitante = "Teste"
             ),
             DigitalizacaoItem(
+                id = "s9h0boahslf",
+                material_id="default",
                 registro = "A Revolução Informacional [Impresso]",
                 paginas = "30-40",
                 status = "Digitalizando",
                 requisitante = "Teste"
             ),
             DigitalizacaoItem(
+                id = "ji2dbw0asd",
+                material_id="default",
                 registro = "A Revolução Informacional [Impresso]",
                 paginas = "30-40",
                 status = "Digitalizando",
                 requisitante = "Teste"
             ),
             DigitalizacaoItem(
+                id = "09ohxb98dh",
+                material_id="default",
                 registro = "A Revolução Informacional [Impresso]",
                 paginas = "30-40",
                 status = "Digitalizando",
