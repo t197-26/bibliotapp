@@ -10,9 +10,14 @@ import android.widget.PopupWindow
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
-class AdminDigitalizationOrdersAdapter(private val dataSet: Array<DigitalizacaoItem>) :
+class AdminDigitalizationOrdersAdapter(private val dataSet: MutableList<DigitalizacaoItem>) :
     RecyclerView.Adapter<AdminDigitalizationOrdersAdapter.ViewHolder>() {
+
+    lateinit var fb: FirebaseFirestore
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val requisitante: TextView = view.findViewById(R.id.dataRequisitante)
@@ -31,6 +36,8 @@ class AdminDigitalizationOrdersAdapter(private val dataSet: Array<DigitalizacaoI
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
+        fb = Firebase.firestore
+
         viewHolder.requisitante.text = dataSet[position].requisitante
         viewHolder.paginas.text = dataSet[position].paginas
         viewHolder.registro.text = dataSet[position].registro
@@ -47,24 +54,23 @@ class AdminDigitalizationOrdersAdapter(private val dataSet: Array<DigitalizacaoI
                 true
             )
 
-            // Optional: add elevation for shadow
             popupWindow.elevation = 12f
 
-            // Handle button clicks
             popupView.findViewById<Button>(R.id.btnFinalizar).setOnClickListener {
-                Toast.makeText(context, "Finalizar", Toast.LENGTH_SHORT).show()
+                updateDigitalizacao(dataSet[position].id, "Enviado")
+                notifyItemChanged(position)
                 popupWindow.dismiss()
             }
 
             popupView.findViewById<Button>(R.id.btnRecusar).setOnClickListener {
-                Toast.makeText(context, "Recusar", Toast.LENGTH_SHORT).show()
+                updateDigitalizacao(dataSet[position].id, "Recusado")
+                notifyItemChanged(position)
                 popupWindow.dismiss()
             }
 
             popupView.findViewById<Button>(R.id.btnIniciar).setOnClickListener {
-                dataSet[position].status = "Em andamento"
+                updateDigitalizacao(dataSet[position].id, "Digitalizando")
                 notifyItemChanged(position)
-                Toast.makeText(context, "Iniciar", Toast.LENGTH_SHORT).show()
                 popupWindow.dismiss()
             }
 
@@ -75,13 +81,17 @@ class AdminDigitalizationOrdersAdapter(private val dataSet: Array<DigitalizacaoI
                 popupWindow.dismiss()
             }
 
-            // Show the popup anchored below the button
             popupWindow.showAsDropDown(anchorView, -85, 0)
         }
-
-
     }
 
     override fun getItemCount() = dataSet.size
 
+    private fun updateDigitalizacao(id:String, novoStatus:String) {
+        fb.collection("digitalizacoes")
+            .document(id)
+            .update(mapOf(
+                "status" to novoStatus
+            ))
+    }
 }
