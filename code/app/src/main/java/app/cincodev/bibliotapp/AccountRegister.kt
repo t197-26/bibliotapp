@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.Switch
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -36,15 +37,16 @@ class AccountRegister : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_account_register)
 
-        val matriculaEditText               = findViewById<EditText>(R.id.AccountRegisterMatriculaEditText)
-        val fullNameEditText                = findViewById<EditText>(R.id.AccountRegisterFullNameEditText)
-        val emailEditText                   = findViewById<EditText>(R.id.AccountRegisterEmailEditText)
-        val passwordEditText                = findViewById<EditText>(R.id.AccountRegisterPasswordEditText)
-        val passwordConfirmationEditText    = findViewById<EditText>(R.id.AccountRegisterPasswordConfirmationEditText)
-        val missingFieldsTextView           = findViewById<TextView>(R.id.AccountRegisterMissingFieldsTextView)
-        val passwordNotMatchingTextView     = findViewById<TextView>(R.id.AccountRegisterPasswordNotMatchingTextView)
-        val arrowBackButtonView             = findViewById<ImageButton>(R.id.AccountRegisterArrowBack)
-        val registerButton                  = findViewById<Button>(R.id.AccountRegisterRegisterButton)
+        val matriculaEditText                   = findViewById<EditText>(R.id.AccountRegisterMatriculaEditText)
+        val fullNameEditText                    = findViewById<EditText>(R.id.AccountRegisterFullNameEditText)
+        val emailEditText                       = findViewById<EditText>(R.id.AccountRegisterEmailEditText)
+        val passwordEditText                    = findViewById<EditText>(R.id.AccountRegisterPasswordEditText)
+        val passwordConfirmationEditText        = findViewById<EditText>(R.id.AccountRegisterPasswordConfirmationEditText)
+        val missingFieldsTextView               = findViewById<TextView>(R.id.AccountRegisterMissingFieldsTextView)
+        val passwordNotMatchingTextView         = findViewById<TextView>(R.id.AccountRegisterPasswordNotMatchingTextView)
+        val arrowBackButtonView                 = findViewById<ImageButton>(R.id.AccountRegisterArrowBack)
+        val registerButton                      = findViewById<Button>(R.id.AccountRegisterRegisterButton)
+        val accountRegisterAdministratorSwitch  = findViewById<Switch>(R.id.AccountRegisterAdministratorSwitch)
 
         arrowBackButtonView.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
@@ -83,7 +85,8 @@ class AccountRegister : AppCompatActivity() {
                             docRef = docRef,
                             name = fullNameEditText.text.toString(),
                             email = emailEditText.text.toString(),
-                            password = passwordEditText.text.toString()
+                            password = passwordEditText.text.toString(),
+                            admin = accountRegisterAdministratorSwitch.isChecked
                         )
 
                         inflateConfirmationPopup()
@@ -133,13 +136,15 @@ class AccountRegister : AppCompatActivity() {
         docRef : DocumentReference,
         name : String,
         email : String,
-        password : String
+        password : String,
+        admin : Boolean
     ) {
          val data = mapOf(
              "name" to name,
              "email" to email,
              "password" to password,
-             "created_at" to System.currentTimeMillis()
+             "created_at" to System.currentTimeMillis(),
+             "isAdmin" to admin
          )
 
          docRef.set(data).await()
