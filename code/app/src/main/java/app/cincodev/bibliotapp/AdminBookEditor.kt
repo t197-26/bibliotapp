@@ -34,7 +34,7 @@ class AdminBookEditor : AppCompatActivity() {
     lateinit var adapter: EditExemplaresAdapter
     lateinit var recyclerView: RecyclerView
 
-    lateinit var titulo: TextView
+    lateinit var titulo: EditText
     lateinit var material: EditText
     lateinit var idioma: EditText
     lateinit var isbn: EditText
@@ -140,7 +140,7 @@ class AdminBookEditor : AppCompatActivity() {
             .document("default")
             .get()
             .addOnSuccessListener { result ->
-                titulo.text = result.get("titulo").toString()
+                titulo.setText(result.get("titulo").toString())
                 material.setText(result.get("material").toString())
                 idioma.setText(result.get("idioma").toString())
                 isbn.setText(result.get("isbn").toString())
