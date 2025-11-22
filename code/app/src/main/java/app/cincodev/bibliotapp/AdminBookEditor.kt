@@ -10,16 +10,27 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+
 
 class AdminBookEditor : AppCompatActivity() {
 
     lateinit var capa: ImageView
 
     lateinit var arrowBackButtonView: ImageButton
-    lateinit var editarExemplar: ImageView
     lateinit var selecionarCapa: ImageButton
 
     lateinit var editarMaterial: Button
+
+    lateinit var fb:FirebaseFirestore
+
+    lateinit var dataset: MutableList<Exemplar>
+    lateinit var adapter: EditExemplaresAdapter
+    lateinit var recyclerView: RecyclerView
 
     private val pickImageLauncher =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
@@ -35,22 +46,18 @@ class AdminBookEditor : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_admin_book_editor)
 
+        fb = Firebase.firestore
+
         capa = findViewById(R.id.capa)
         selecionarCapa = findViewById(R.id.selecionarCapa)
 
         arrowBackButtonView = findViewById(R.id.adminEditBookArrowBack)
-        editarExemplar = findViewById(R.id.editarExemplar)
 
         editarMaterial = findViewById(R.id.editarButton)
         btnDescartar = findViewById(R.id.descartarButton)
 
         arrowBackButtonView.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
-        }
-
-        editarExemplar.setOnClickListener {
-            startActivity(Intent(this, AdminEditExemplar::class.java))
-
         }
 
         editarMaterial.setOnClickListener {
@@ -65,8 +72,15 @@ class AdminBookEditor : AppCompatActivity() {
             pickImageLauncher.launch("image/*")
         }
 
-    }
+        recyclerView = findViewById(R.id.editExemplaresAdapter)
 
+        dataset = mutableListOf()
+        adapter = EditExemplaresAdapter(this, dataset)
+
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = adapter
+
+    }
     private fun confirmarEdicao(context: android.content.Context) {
         val dialogView = LayoutInflater.from(context)
             .inflate(R.layout.dialog_confirmation_edit_material, null)
@@ -89,4 +103,37 @@ class AdminBookEditor : AppCompatActivity() {
 
         dialog.show()
     }
+
+    override fun onStart() {
+        super.onStart()
+        loadExemplares()
+    }
+
+    private fun loadExemplares() {
+        fb.collection("materiais")
+            .document("default")
+            .collection("exemplares")
+            .addSnapshotListener { snapshot, e ->
+
+                if (snapshot != null) {
+
+                    dataset.clear()
+
+                    for (doc in snapshot) {
+                        dataset.add(
+                            Exemplar(
+                                doc.id,
+                                doc.getString("suporte") ?: "",
+                                doc.getString("registro") ?: "",
+                                doc.getString("disponibilidade") ?: "",
+                                doc.getString("status") ?: ""
+                            )
+                        )
+                    }
+
+                    adapter.notifyDataSetChanged()
+                }
+            }
+    }
+
 }
