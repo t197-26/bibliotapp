@@ -16,7 +16,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import android.widget.EditText
-import android.widget.TextView
 
 
 class AdminBookEditor : AppCompatActivity() {
@@ -42,6 +41,8 @@ class AdminBookEditor : AppCompatActivity() {
     lateinit var cdu: EditText
     lateinit var edicao: EditText
     lateinit var publicacao: EditText
+
+    lateinit var btnCreateExemplar: ImageView
 
     private val pickImageLauncher =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
@@ -72,7 +73,7 @@ class AdminBookEditor : AppCompatActivity() {
         }
 
         editarMaterial.setOnClickListener {
-            confirmarEdicao(this);
+            confirmarEdicao(this)
         }
 
         btnDescartar.setOnClickListener {
@@ -81,6 +82,11 @@ class AdminBookEditor : AppCompatActivity() {
 
         selecionarCapa.setOnClickListener {
             pickImageLauncher.launch("image/*")
+        }
+
+        btnCreateExemplar = findViewById(R.id.btnCreateExemplar)
+        btnCreateExemplar.setOnClickListener {
+            createExemplar()
         }
 
         // Dados do material
@@ -106,28 +112,21 @@ class AdminBookEditor : AppCompatActivity() {
         recyclerView.adapter = adapter
 
     }
-    private fun confirmarEdicao(context: android.content.Context) {
-        val dialogView = LayoutInflater.from(context)
-            .inflate(R.layout.dialog_confirmation_edit_material, null)
 
-        val dialog = AlertDialog.Builder(context)
-            .setView(dialogView)
-            .create()
-
-        val btnCancelar = dialogView.findViewById<Button>(R.id.btnCancelar)
-        val btnConfirmar = dialogView.findViewById<Button>(R.id.btnConfirmar)
-
-        btnCancelar.setOnClickListener {
-            dialog.dismiss()
-        }
-
-        btnConfirmar.setOnClickListener {
-            updateMaterial()
-            startActivity(Intent(this, AdminHome::class.java))
-            dialog.dismiss()
-        }
-
-        dialog.show()
+    private fun createExemplar() {
+        fb.collection("materiais")
+            .document("default")
+            .collection("exemplares")
+            .add(
+                mapOf(
+                    "disponibilidade" to "Imediata",
+                    "registro" to "XXXXXX",
+                    "status" to "Disponível",
+                    "suporte" to "Impresso",
+                    "ano" to "XXXX",
+                    "situacao" to "Cativo"
+                )
+            )
     }
 
     override fun onStart() {
@@ -196,6 +195,30 @@ class AdminBookEditor : AppCompatActivity() {
                     adapter.notifyDataSetChanged()
                 }
             }
+    }
+
+    private fun confirmarEdicao(context: android.content.Context) {
+        val dialogView = LayoutInflater.from(context)
+            .inflate(R.layout.dialog_confirmation_edit_material, null)
+
+        val dialog = AlertDialog.Builder(context)
+            .setView(dialogView)
+            .create()
+
+        val btnCancelar = dialogView.findViewById<Button>(R.id.btnCancelar)
+        val btnConfirmar = dialogView.findViewById<Button>(R.id.btnConfirmar)
+
+        btnCancelar.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        btnConfirmar.setOnClickListener {
+            updateMaterial()
+            startActivity(Intent(this, AdminHome::class.java))
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 
 }

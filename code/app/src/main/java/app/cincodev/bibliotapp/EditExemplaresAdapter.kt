@@ -41,6 +41,12 @@ class EditExemplaresAdapter(
         holder.status.text = exemplar.status
 
         holder.editarExemplar.setOnClickListener {
+
+            val x = context.getSharedPreferences("arquivo",MODE_PRIVATE)
+            x.edit {
+                putString("EDIT_EXEMPLAR_ID", exemplar.id)
+            }
+
             val intent = Intent(context, AdminEditExemplar::class.java)
             context.startActivity(intent)
         }
