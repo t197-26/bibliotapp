@@ -122,6 +122,7 @@ class AdminBookEditor : AppCompatActivity() {
         }
 
         btnConfirmar.setOnClickListener {
+            updateMaterial()
             startActivity(Intent(this, AdminHome::class.java))
             dialog.dismiss()
         }
@@ -134,6 +135,24 @@ class AdminBookEditor : AppCompatActivity() {
         loadExemplares()
         readMaterial()
     }
+
+    private fun updateMaterial() {
+        fb.collection("materiais")
+            .document("default")
+            .update(
+                mapOf(
+                    "titulo" to titulo.text.toString(),
+                    "material" to material.text.toString(),
+                    "idioma" to idioma.text.toString(),
+                    "isbn" to isbn.text.toString(),
+                    "autor" to autor.text.toString(),
+                    "cdu" to cdu.text.toString(),
+                    "edicao" to edicao.text.toString(),
+                    "publicacao" to publicacao.text.toString()
+                )
+            )
+    }
+
 
     private fun readMaterial() {
         fb.collection("materiais")
