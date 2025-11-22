@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import android.widget.EditText
+import android.widget.TextView
 
 
 class AdminBookEditor : AppCompatActivity() {
@@ -32,6 +34,15 @@ class AdminBookEditor : AppCompatActivity() {
     lateinit var adapter: EditExemplaresAdapter
     lateinit var recyclerView: RecyclerView
 
+    lateinit var titulo: TextView
+    lateinit var material: EditText
+    lateinit var idioma: EditText
+    lateinit var isbn: EditText
+    lateinit var autor: EditText
+    lateinit var cdu: EditText
+    lateinit var edicao: EditText
+    lateinit var publicacao: EditText
+
     private val pickImageLauncher =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             uri?.let {
@@ -39,13 +50,13 @@ class AdminBookEditor : AppCompatActivity() {
             }
         }
 
-
     lateinit var btnDescartar: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_admin_book_editor)
 
+        // Instância do Firestore
         fb = Firebase.firestore
 
         capa = findViewById(R.id.capa)
@@ -72,11 +83,25 @@ class AdminBookEditor : AppCompatActivity() {
             pickImageLauncher.launch("image/*")
         }
 
+        // Dados do material
+        titulo = findViewById(R.id.bookTitle)
+        material = findViewById(R.id.bookMaterial)
+        idioma = findViewById(R.id.bookIdioma)
+        isbn = findViewById(R.id.bookISBN)
+        autor = findViewById(R.id.bookAutor)
+        cdu = findViewById(R.id.bookCDU)
+        edicao = findViewById(R.id.bookEdicao)
+        publicacao = findViewById(R.id.bookPublicacao)
+
+        // RecyclerView de exemplares
         recyclerView = findViewById(R.id.editExemplaresAdapter)
 
+        // Dataset de exemplares
         dataset = mutableListOf()
+        // Adapter para os exemplares
         adapter = EditExemplaresAdapter(this, dataset)
 
+        // Instância do adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
 
@@ -107,7 +132,25 @@ class AdminBookEditor : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         loadExemplares()
+        readMaterial()
     }
+
+    private fun readMaterial() {
+        fb.collection("materiais")
+            .document("default")
+            .get()
+            .addOnSuccessListener { result ->
+                titulo.text = result.get("titulo").toString()
+                material.setText(result.get("material").toString())
+                idioma.setText(result.get("idioma").toString())
+                isbn.setText(result.get("isbn").toString())
+                autor.setText(result.get("autor").toString())
+                cdu.setText(result.get("cdu").toString())
+                edicao.setText(result.get("edicao").toString())
+                publicacao.setText(result.get("publicacao").toString())
+            }
+    }
+
 
     private fun loadExemplares() {
         fb.collection("materiais")

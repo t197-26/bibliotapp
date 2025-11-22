@@ -71,7 +71,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="4dp"
-                        android:text="Sistemas de informacoes e decisoes gerenciais na era da Internet"
                         android:textColor="@color/black"
                         android:textSize="24sp" />
 
@@ -101,8 +100,7 @@
                                 <EditText
                                     android:id="@+id/bookMaterial"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Livro" />
+                                    android:layout_height="wrap_content" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -119,10 +117,9 @@
                                     android:textStyle="bold" />
 
                                 <EditText
-                                    android:id="@+id/materialIdioma"
+                                    android:id="@+id/bookIdioma"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Português" />
+                                    android:layout_height="wrap_content" />
                             </LinearLayout>
 
                         </TableRow>
@@ -147,8 +144,7 @@
                                 <EditText
                                     android:id="@+id/bookISBN"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="85-02-77.84" />
+                                    android:layout_height="wrap_content" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -167,8 +163,7 @@
                                 <EditText
                                     android:id="@+id/bookAutor"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="O'Brien, James A." />
+                                    android:layout_height="wrap_content" />
                             </LinearLayout>
 
                         </TableRow>
@@ -193,8 +188,7 @@
                                 <EditText
                                     android:id="@+id/bookCDU"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="658.5 M366a" />
+                                    android:layout_height="wrap_content" />
                             </LinearLayout>
                         </TableRow>
 
@@ -218,8 +212,7 @@
                                 <EditText
                                     android:id="@+id/bookEdicao"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="3" />
+                                    android:layout_height="wrap_content" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -236,10 +229,9 @@
                                     android:textStyle="bold" />
 
                                 <EditText
-                                    android:id="@+id/textView17"
+                                    android:id="@+id/bookPublicacao"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="São Paulo" />
+                                    android:layout_height="wrap_content" />
                             </LinearLayout>
                         </TableRow>
                     </TableLayout>
