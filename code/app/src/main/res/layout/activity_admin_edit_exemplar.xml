@@ -59,7 +59,7 @@
                         android:layout_height="wrap_content"/>
 
                     <EditText
-                        android:id="@+id/bookMaterial"
+                        android:id="@+id/etRegistro"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="123456" />
@@ -78,7 +78,7 @@
                         android:layout_height="wrap_content"/>
 
                     <EditText
-                        android:id="@+id/materialIdioma"
+                        android:id="@+id/etAno"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="2003" />
@@ -98,7 +98,7 @@
                         android:layout_height="wrap_content"/>
 
                     <EditText
-                        android:id="@+id/bookCDU"
+                        android:id="@+id/etSituacao"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Cativo" />

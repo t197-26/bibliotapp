@@ -66,12 +66,11 @@
                     android:layout_margin="16dp"
                     android:orientation="vertical">
 
-                    <TextView
+                    <EditText
                         android:id="@+id/bookTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="4dp"
-                        android:text="Sistemas de informacoes e decisoes gerenciais na era da Internet"
                         android:textColor="@color/black"
                         android:textSize="24sp" />
 
@@ -101,8 +100,7 @@
                                 <EditText
                                     android:id="@+id/bookMaterial"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Livro" />
+                                    android:layout_height="wrap_content" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -119,10 +117,9 @@
                                     android:textStyle="bold" />
 
                                 <EditText
-                                    android:id="@+id/materialIdioma"
+                                    android:id="@+id/bookIdioma"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Português" />
+                                    android:layout_height="wrap_content" />
                             </LinearLayout>
 
                         </TableRow>
@@ -147,8 +144,7 @@
                                 <EditText
                                     android:id="@+id/bookISBN"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="85-02-77.84" />
+                                    android:layout_height="wrap_content" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -167,8 +163,7 @@
                                 <EditText
                                     android:id="@+id/bookAutor"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="O'Brien, James A." />
+                                    android:layout_height="wrap_content" />
                             </LinearLayout>
 
                         </TableRow>
@@ -193,8 +188,7 @@
                                 <EditText
                                     android:id="@+id/bookCDU"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="658.5 M366a" />
+                                    android:layout_height="wrap_content" />
                             </LinearLayout>
                         </TableRow>
 
@@ -218,8 +212,7 @@
                                 <EditText
                                     android:id="@+id/bookEdicao"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="3" />
+                                    android:layout_height="wrap_content" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -236,10 +229,9 @@
                                     android:textStyle="bold" />
 
                                 <EditText
-                                    android:id="@+id/textView17"
+                                    android:id="@+id/bookPublicacao"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="São Paulo" />
+                                    android:layout_height="wrap_content" />
                             </LinearLayout>
                         </TableRow>
                     </TableLayout>
@@ -259,90 +251,13 @@
                         android:orientation="vertical"
                         android:padding="8dp">
 
-                        <LinearLayout
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/editExemplaresAdapter"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="2"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:id="@+id/textView21"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Suporte"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:id="@+id/bookExemplarSuporte"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="Impresso" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="2"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:id="@+id/textView19"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Registro"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:id="@+id/bookExemplarRegistro"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="123456" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="2"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:id="@+id/textView28"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Disponível"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:id="@+id/bookExemplarDisponibilidade"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="Em 5 dias" />
-                            </LinearLayout>
-
-                            <TextView
-                                android:id="@+id/bookExemplarStatus"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="2"
-                                android:text="Emprestado" />
-
-                            <ImageView
-                                android:id="@+id/editarExemplar"
-                                android:layout_width="16dp"
-                                android:layout_height="16dp"
-                                android:layout_weight="1"
-                                app:srcCompat="@drawable/ic_pencil_exemplar_edit" />
-
-                        </LinearLayout>
-
+                            android:layout_height="wrap_content" />
                     </LinearLayout>
                     <ImageView
-                        android:id="@+id/imageView8"
+                        android:id="@+id/btnCreateExemplar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"

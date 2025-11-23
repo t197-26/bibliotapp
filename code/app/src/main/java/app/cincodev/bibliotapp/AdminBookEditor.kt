@@ -10,16 +10,39 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import android.widget.EditText
+
 
 class AdminBookEditor : AppCompatActivity() {
 
     lateinit var capa: ImageView
 
     lateinit var arrowBackButtonView: ImageButton
-    lateinit var editarExemplar: ImageView
     lateinit var selecionarCapa: ImageButton
 
     lateinit var editarMaterial: Button
+
+    lateinit var fb:FirebaseFirestore
+
+    lateinit var dataset: MutableList<Exemplar>
+    lateinit var adapter: EditExemplaresAdapter
+    lateinit var recyclerView: RecyclerView
+
+    lateinit var titulo: EditText
+    lateinit var material: EditText
+    lateinit var idioma: EditText
+    lateinit var isbn: EditText
+    lateinit var autor: EditText
+    lateinit var cdu: EditText
+    lateinit var edicao: EditText
+    lateinit var publicacao: EditText
+
+    lateinit var btnCreateExemplar: ImageView
 
     private val pickImageLauncher =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
@@ -28,18 +51,19 @@ class AdminBookEditor : AppCompatActivity() {
             }
         }
 
-
     lateinit var btnDescartar: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_admin_book_editor)
 
+        // Instância do Firestore
+        fb = Firebase.firestore
+
         capa = findViewById(R.id.capa)
         selecionarCapa = findViewById(R.id.selecionarCapa)
 
         arrowBackButtonView = findViewById(R.id.adminEditBookArrowBack)
-        editarExemplar = findViewById(R.id.editarExemplar)
 
         editarMaterial = findViewById(R.id.editarButton)
         btnDescartar = findViewById(R.id.descartarButton)
@@ -48,13 +72,8 @@ class AdminBookEditor : AppCompatActivity() {
             onBackPressedDispatcher.onBackPressed()
         }
 
-        editarExemplar.setOnClickListener {
-            startActivity(Intent(this, AdminEditExemplar::class.java))
-
-        }
-
         editarMaterial.setOnClickListener {
-            confirmarEdicao(this);
+            confirmarEdicao(this)
         }
 
         btnDescartar.setOnClickListener {
@@ -65,6 +84,117 @@ class AdminBookEditor : AppCompatActivity() {
             pickImageLauncher.launch("image/*")
         }
 
+        btnCreateExemplar = findViewById(R.id.btnCreateExemplar)
+        btnCreateExemplar.setOnClickListener {
+            createExemplar()
+        }
+
+        // Dados do material
+        titulo = findViewById(R.id.bookTitle)
+        material = findViewById(R.id.bookMaterial)
+        idioma = findViewById(R.id.bookIdioma)
+        isbn = findViewById(R.id.bookISBN)
+        autor = findViewById(R.id.bookAutor)
+        cdu = findViewById(R.id.bookCDU)
+        edicao = findViewById(R.id.bookEdicao)
+        publicacao = findViewById(R.id.bookPublicacao)
+
+        // RecyclerView de exemplares
+        recyclerView = findViewById(R.id.editExemplaresAdapter)
+
+        // Dataset de exemplares
+        dataset = mutableListOf()
+        // Adapter para os exemplares
+        adapter = EditExemplaresAdapter(this, dataset)
+
+        // Instância do adapter
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = adapter
+
+    }
+
+    private fun createExemplar() {
+        fb.collection("materiais")
+            .document("default")
+            .collection("exemplares")
+            .add(
+                mapOf(
+                    "disponibilidade" to "Imediata",
+                    "registro" to "XXXXXX",
+                    "status" to "Disponível",
+                    "suporte" to "Impresso",
+                    "ano" to "XXXX",
+                    "situacao" to "Cativo"
+                )
+            )
+    }
+
+    override fun onStart() {
+        super.onStart()
+        loadExemplares()
+        readMaterial()
+    }
+
+    private fun updateMaterial() {
+        fb.collection("materiais")
+            .document("default")
+            .update(
+                mapOf(
+                    "titulo" to titulo.text.toString(),
+                    "material" to material.text.toString(),
+                    "idioma" to idioma.text.toString(),
+                    "isbn" to isbn.text.toString(),
+                    "autor" to autor.text.toString(),
+                    "cdu" to cdu.text.toString(),
+                    "edicao" to edicao.text.toString(),
+                    "publicacao" to publicacao.text.toString()
+                )
+            )
+    }
+
+
+    private fun readMaterial() {
+        fb.collection("materiais")
+            .document("default")
+            .get()
+            .addOnSuccessListener { result ->
+                titulo.setText(result.get("titulo").toString())
+                material.setText(result.get("material").toString())
+                idioma.setText(result.get("idioma").toString())
+                isbn.setText(result.get("isbn").toString())
+                autor.setText(result.get("autor").toString())
+                cdu.setText(result.get("cdu").toString())
+                edicao.setText(result.get("edicao").toString())
+                publicacao.setText(result.get("publicacao").toString())
+            }
+    }
+
+
+    private fun loadExemplares() {
+        fb.collection("materiais")
+            .document("default")
+            .collection("exemplares")
+            .addSnapshotListener { snapshot, e ->
+
+                if (snapshot != null) {
+
+                    dataset.clear()
+
+                    for (doc in snapshot) {
+                        dataset.add(
+                            Exemplar(
+                                doc.id,
+                                doc.getString("suporte") ?: "",
+                                doc.getString("registro") ?: "",
+                                doc.getString("disponibilidade") ?: "",
+                                doc.getString("status") ?: ""
+                            )
+                        )
+                    }
+
+                    adapter.notifyDataSetChanged()
+                }
+            }
     }
 
     private fun confirmarEdicao(context: android.content.Context) {
@@ -83,10 +213,12 @@ class AdminBookEditor : AppCompatActivity() {
         }
 
         btnConfirmar.setOnClickListener {
+            updateMaterial()
             startActivity(Intent(this, AdminHome::class.java))
             dialog.dismiss()
         }
 
         dialog.show()
     }
+
 }
