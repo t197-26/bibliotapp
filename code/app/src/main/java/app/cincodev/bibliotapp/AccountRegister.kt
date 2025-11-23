@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.Switch
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -36,15 +37,15 @@ class AccountRegister : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_account_register)
 
-        val matriculaEditText               = findViewById<EditText>(R.id.AccountRegisterMatriculaEditText)
-        val fullNameEditText                = findViewById<EditText>(R.id.AccountRegisterFullNameEditText)
-        val emailEditText                   = findViewById<EditText>(R.id.AccountRegisterEmailEditText)
-        val passwordEditText                = findViewById<EditText>(R.id.AccountRegisterPasswordEditText)
-        val passwordConfirmationEditText    = findViewById<EditText>(R.id.AccountRegisterPasswordConfirmationEditText)
-        val missingFieldsTextView           = findViewById<TextView>(R.id.AccountRegisterMissingFieldsTextView)
-        val passwordNotMatchingTextView     = findViewById<TextView>(R.id.AccountRegisterPasswordNotMatchingTextView)
-        val arrowBackButtonView             = findViewById<ImageButton>(R.id.AccountRegisterArrowBack)
-        val registerButton                  = findViewById<Button>(R.id.AccountRegisterRegisterButton)
+        val alertTextView                       = findViewById<TextView>(R.id.AccountRegisterAlertFieldsTextView)
+        val matriculaEditText                   = findViewById<EditText>(R.id.AccountRegisterMatriculaEditText)
+        val fullNameEditText                    = findViewById<EditText>(R.id.AccountRegisterFullNameEditText)
+        val emailEditText                       = findViewById<EditText>(R.id.AccountRegisterEmailEditText)
+        val passwordEditText                    = findViewById<EditText>(R.id.AccountRegisterPasswordEditText)
+        val passwordConfirmationEditText        = findViewById<EditText>(R.id.AccountRegisterPasswordConfirmationEditText)
+        val arrowBackButtonView                 = findViewById<ImageButton>(R.id.AccountRegisterArrowBack)
+        val registerButton                      = findViewById<Button>(R.id.AccountRegisterRegisterButton)
+        val accountRegisterAdministratorSwitch  = findViewById<Switch>(R.id.AccountRegisterAdministratorSwitch)
 
         arrowBackButtonView.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
@@ -52,8 +53,7 @@ class AccountRegister : AppCompatActivity() {
 
         val db = Firebase.firestore
         registerButton.setOnClickListener {
-            missingFieldsTextView.visibility = View.INVISIBLE
-            passwordNotMatchingTextView.visibility = View.INVISIBLE
+            alertTextView.visibility = View.INVISIBLE
 
             val missingField = (
                     matriculaEditText.text.toString().isEmpty()
@@ -63,31 +63,58 @@ class AccountRegister : AppCompatActivity() {
                             || passwordConfirmationEditText.text.toString().isEmpty()
                     )
 
+            if (missingField) {
+                alertTextView.visibility = View.VISIBLE
+                alertTextView.text = "Todos os campos são obrigatórios"
+                return@setOnClickListener
+            }
+
+            if (!validMatricula(matriculaEditText.text.toString())) {
+                alertTextView.visibility = View.VISIBLE
+                alertTextView.text = "Matrícula inválida"
+                return@setOnClickListener
+            }
+
+            if (!validEmail(emailEditText.text.toString())) {
+                alertTextView.visibility = View.VISIBLE
+                alertTextView.text = "E-mail inválido"
+                return@setOnClickListener
+            }
+
+            if (!validPassword(passwordEditText.text.toString())) {
+                alertTextView.visibility = View.VISIBLE
+                alertTextView.text = "Senha não está de acordo com a política (8 números)"
+                return@setOnClickListener
+            }
+
             val mismatchedPassword = (
                     passwordEditText.text.toString()
                             != passwordConfirmationEditText.text.toString()
                     )
 
-            if (missingField) { missingFieldsTextView.visibility = View.VISIBLE }
-            else if (mismatchedPassword) { passwordNotMatchingTextView.visibility = View.VISIBLE }
-            else {
-                val docRef = db.collection("users")
-                    .document(matriculaEditText.text.toString())
+            if (mismatchedPassword) {
+                alertTextView.visibility = View.VISIBLE
+                alertTextView.text = "As senhas não são iguais"
+                return@setOnClickListener
+            }
 
-                lifecycleScope.launch {
-                    val document = docRef.get().await()
-                    if (document.exists()) {
-                        inflateCancelPopup()
-                    } else {
-                        userWrite(
-                            docRef = docRef,
-                            name = fullNameEditText.text.toString(),
-                            email = emailEditText.text.toString(),
-                            password = passwordEditText.text.toString()
-                        )
+            val docRef = db.collection("users")
+                .document(matriculaEditText.text.toString())
 
-                        inflateConfirmationPopup()
-                    }
+            lifecycleScope.launch {
+                val document = docRef.get().await()
+                if (document.exists()) {
+                    inflateCancelPopup()
+                } else {
+                    userWrite(
+                        docRef = docRef,
+                        name = fullNameEditText.text.toString(),
+                        email = emailEditText.text.toString(),
+                        password = passwordEditText.text.toString(),
+                        admin = accountRegisterAdministratorSwitch.isChecked
+                    )
+
+                    inflateConfirmationPopup()
                 }
             }
         }
@@ -133,15 +160,45 @@ class AccountRegister : AppCompatActivity() {
         docRef : DocumentReference,
         name : String,
         email : String,
-        password : String
+        password : String,
+        admin : Boolean
     ) {
          val data = mapOf(
              "name" to name,
              "email" to email,
              "password" to password,
-             "created_at" to System.currentTimeMillis()
+             "created_at" to System.currentTimeMillis(),
+             "isAdmin" to admin
          )
 
          docRef.set(data).await()
+    }
+
+    fun validPassword (password : String) : Boolean {
+        if (
+            password.length == 8
+            && password.all { it.isDigit() } ) {
+            return true
+        }
+
+        return false
+    }
+
+    fun validEmail (email : String) : Boolean {
+        if (
+            email.isNotEmpty()
+            && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            return true
+        }
+
+        return false
+    }
+
+    fun validMatricula (matricula : String) : Boolean {
+        if (matricula.length == 7) {
+            return true
+        }
+
+        return false
     }
 }
