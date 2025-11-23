@@ -1,10 +1,8 @@
 package app.cincodev.bibliotapp
 
 import android.os.Bundle
-import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,6 +19,10 @@ class UserChatbot : AppCompatActivity() {
     private lateinit var generative: GenerativeModel
     private lateinit var chatAdapter: ChatAdapter
     private val messages = mutableListOf<Message>()
+
+    private var typingIndex: Int? = null
+
+    private var prePrompt = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,26 +42,37 @@ class UserChatbot : AppCompatActivity() {
             apiKey = ""
         )
 
+
+        prePrompt =
+            "Você deve ser educado, e não ultrapassar 400 caracteres por resposta. "
+
         arrowBackButton.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
 
-
         btnSend.setOnClickListener {
+
             val userInput = inputMessage.text.toString().trim()
-            if (userInput.isNotEmpty()) {
-                addMessage(userInput, true)
-                inputMessage.text.clear()
+            if (userInput.isEmpty()) return@setOnClickListener
 
-                lifecycleScope.launch {
-                    try {
-                        val response = generative.generateContent(userInput)
-                        val reply = response.text ?: "Sem resposta."
-                        addMessage(reply, false)
+            addMessage(userInput, true)
+            inputMessage.text.clear()
 
-                    } catch (e: Exception) {
-                        addMessage("Erro: ${e.message}", false)
-                    }
+            lifecycleScope.launch {
+                showTyping()
+
+                try {
+
+                    val response = generative.generateContent(prePrompt + userInput)
+
+                    var reply = response.text ?: "Sem resposta."
+
+                    hideTyping()
+                    addMessage(reply, false)
+
+                } catch (e: Exception) {
+                    hideTyping()
+                    addMessage("Erro: Tente novamente mais tarde!", false)
                 }
             }
         }
@@ -69,5 +82,21 @@ class UserChatbot : AppCompatActivity() {
         messages.add(Message(text, isUser))
         chatAdapter.notifyItemInserted(messages.size - 1)
         recyclerView.scrollToPosition(messages.size - 1)
+    }
+
+    private fun showTyping() {
+        val typingMsg = Message("Digitando...", false)
+        messages.add(typingMsg)
+        typingIndex = messages.lastIndex
+        chatAdapter.notifyItemInserted(typingIndex!!)
+        recyclerView.scrollToPosition(messages.size - 1)
+    }
+
+    private fun hideTyping() {
+        typingIndex?.let { index ->
+            messages.removeAt(index)
+            chatAdapter.notifyItemRemoved(index)
+            typingIndex = null
+        }
     }
 }
