@@ -15,13 +15,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.children
 import com.google.firebase.firestore.FirebaseFirestore
 
 class SelectSpace : AppCompatActivity() {
     lateinit var arrowBackButtonView: ImageButton
     lateinit var salasGridLayout: GridLayout
     private val db = FirebaseFirestore.getInstance()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -56,6 +56,8 @@ class SelectSpace : AppCompatActivity() {
             tvEndHour.text = formatHour(endHour)
         }
     }
+
+    private var selectedSpace: String? = null
 
     override fun onStart() {
         salasGridLayout = findViewById(R.id.gridSalas)
@@ -93,7 +95,7 @@ class SelectSpace : AppCompatActivity() {
             val button = Button(this, null).apply {
                 text = sala
 
-                background = ContextCompat.getDrawable(this@SelectSpace, if (ocupada) R.drawable.tag_background_yellow else R.drawable.bg_rounded_button)
+                background = ContextCompat.getDrawable(this@SelectSpace, if (ocupada) R.drawable.disabled_background else R.drawable.enabled_background)
 
                 layoutParams = GridLayout.LayoutParams().apply {
                     width = 0
@@ -101,7 +103,19 @@ class SelectSpace : AppCompatActivity() {
                     columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
                 }
 
-                setOnClickListener {
+                if (!ocupada) {
+                    setOnClickListener {
+                        selectedSpace = sala
+                        for (child in salasGridLayout.children) {
+                            if (!child.hasOnClickListeners()) continue
+                            child as Button
+                            if (child.text == selectedSpace) {
+                                child.background = ContextCompat.getDrawable(this@SelectSpace, R.drawable.selected_background)
+                            } else {
+                                child.background = ContextCompat.getDrawable(this@SelectSpace, R.drawable.enabled_background)
+                            }
+                        }
+                    }
                 }
             }
 
