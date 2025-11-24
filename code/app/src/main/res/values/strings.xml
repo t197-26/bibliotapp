@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Bibliotapp</string>
+    <string name="horario_reserva">%1$d:00 até %2$d:00</string>
 </resources>
