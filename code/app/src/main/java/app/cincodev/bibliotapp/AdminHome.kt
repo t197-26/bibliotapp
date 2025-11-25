@@ -15,6 +15,7 @@ class AdminHome : AppCompatActivity() {
     lateinit var EditarMaterialConstraintLayout : ConstraintLayout
     lateinit var EmprestimosConstraintLayout : ConstraintLayout
     lateinit var ReservasEspacoConstraintLayout : ConstraintLayout
+    lateinit var BuscaConstraintLayout : ConstraintLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +49,11 @@ class AdminHome : AppCompatActivity() {
         ReservasEspacoConstraintLayout = findViewById(R.id.AdminHomeBodyReservasEspacoConstraintLayout)
         ReservasEspacoConstraintLayout.setOnClickListener {
             startActivity(Intent(this, AdminSpaceBookingSearch::class.java))
+        }
+
+        BuscaConstraintLayout = findViewById(R.id.AdminHomeBodyBuscaConstraintLayout)
+        BuscaConstraintLayout.setOnClickListener {
+            startActivity(Intent(this, AdminBookSearch::class.java))
         }
 
     }
