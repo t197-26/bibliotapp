@@ -3,10 +3,12 @@ package app.cincodev.bibliotapp
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -31,10 +33,20 @@ class AdminBookRegister : AppCompatActivity() {
 
     lateinit var fb:FirebaseFirestore
 
+    private var capaBase64: String? = null
+
     private val pickImageLauncher =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             uri?.let {
                 capa.setImageURI(it)
+
+                val bytes = getBytesFromUri(it)
+                bytes?.let { imageBytes ->
+                    capaBase64 = android.util.Base64.encodeToString(
+                        imageBytes,
+                        android.util.Base64.NO_WRAP
+                    )
+                }
             }
         }
 
@@ -68,10 +80,10 @@ class AdminBookRegister : AppCompatActivity() {
     }
 
     private fun addMaterial() {
-
         fb.collection("materiais")
             .add(
                 mapOf(
+                    "capa" to capaBase64,
                     "titulo" to etTitulo.text.toString(),
                     "material" to etMaterial.text.toString(),
                     "idioma" to etIdioma.text.toString(),
@@ -82,10 +94,14 @@ class AdminBookRegister : AppCompatActivity() {
                     "publicacao" to etPublicacao.text.toString()
                 )
             )
-            .addOnSuccessListener {
-                // só passa pra próxima tela quando o Create é concluído
+            .addOnSuccessListener { documentReference ->
+                Log.i("AddMaterial", "Material adicionado com sucesso! ID: ${documentReference.id}")
                 val intencao = Intent(this, AdminHome::class.java)
                 startActivity(intencao)
+            }
+            .addOnFailureListener { e ->
+                Log.e("AddMaterial", "Erro ao adicionar material: ${e.message}", e)
+                Toast.makeText(this, "Erro ao adicionar material: ${e.message}", Toast.LENGTH_LONG).show()
             }
     }
 
@@ -110,5 +126,16 @@ class AdminBookRegister : AppCompatActivity() {
         }
 
         dialog.show()
+    }
+
+    private fun getBytesFromUri(uri: Uri): ByteArray? {
+        return try {
+            contentResolver.openInputStream(uri)?.use { inputStream ->
+                inputStream.readBytes()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
     }
 }
