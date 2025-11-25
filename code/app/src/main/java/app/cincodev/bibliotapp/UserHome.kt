@@ -55,11 +55,18 @@ class UserHome : AppCompatActivity() {
 
         val btnDigitalizacoes: ImageView = findViewById(R.id.btnDIgitalizacoes)
         val btnReservarEspaco: ImageView = findViewById(R.id.btnReservarEspaco)
+        var btnBuscarLivro: ImageView = findViewById(R.id.btnBuscarLivro)
         val fabChatbot: FloatingActionButton = findViewById(R.id.fab)
 
         btnDigitalizacoes.setOnClickListener { openDigitalizacoes() }
         btnReservarEspaco.setOnClickListener { openReservarEspaco() }
+        btnBuscarLivro.setOnClickListener { openBuscarLivro() }
         fabChatbot.setOnClickListener { openChatbot() }
+    }
+
+    private fun openBuscarLivro(){
+        val intent = Intent(this, UserBookSearch::class.java)
+        startActivity(intent)
     }
 
     private fun openDigitalizacoes() {
