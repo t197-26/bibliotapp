@@ -2,13 +2,13 @@ package app.cincodev.bibliotapp
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 
 class MaterialAdapter(
     private val lista: List<Material>
@@ -24,30 +24,31 @@ class MaterialAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MaterialViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_book_list_seach_user, parent, false)
+            .inflate(R.layout.item_book_list_search_user, parent, false)
         return MaterialViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: MaterialViewHolder, position: Int) {
         val item = lista[position]
 
-        holder.nome.text = item.nome
-        holder.tipo.text = "Tipo: ${item.tipo}"
-        holder.codigo.text = "Código: ${item.codigo}"
+        holder.nome.text = item.titulo
+        holder.tipo.text = "Tipo: ${item.material}"
+        holder.codigo.text = "ISBN: ${item.isbn}"
         holder.autor.text = "Autor: ${item.autor}"
 
-        // --- SAFE GLIDE ---
-        if (!item.imagemUrl.isNullOrEmpty()) {
-            Glide.with(holder.img.context)
-                .load(item.imagemUrl)
-                .placeholder(R.drawable.book_01)
-                .error(R.drawable.book_01)
-                .into(holder.img)
+        // --- BASE64 IMAGE ---
+        if (!item.capa.isNullOrEmpty()) {
+            try {
+                val bytes = android.util.Base64.decode(item.capa, android.util.Base64.DEFAULT)
+                val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                holder.img.setImageBitmap(bitmap)
+            } catch (e: Exception) {
+                holder.img.setImageResource(R.drawable.book_01)
+            }
         } else {
             holder.img.setImageResource(R.drawable.book_01)
         }
 
-        // --- CLICK EVENT ---
         holder.itemView.setOnClickListener {
             val context = holder.itemView.context
 
@@ -57,6 +58,7 @@ class MaterialAdapter(
             context.startActivity(Intent(context, UserBookDetail::class.java))
         }
     }
+
 
 
     override fun getItemCount() = lista.size
