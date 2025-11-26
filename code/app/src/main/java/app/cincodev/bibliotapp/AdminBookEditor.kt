@@ -4,7 +4,7 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
+import android.util.Base64
 import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.ImageButton
@@ -13,22 +13,21 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import android.widget.EditText
 
-
 class AdminBookEditor : AppCompatActivity() {
 
-    lateinit var capa: ImageView
+    private lateinit var bookId: String
 
+    lateinit var capa: ImageView
     lateinit var arrowBackButtonView: ImageButton
     lateinit var selecionarCapa: ImageButton
-
     lateinit var editarMaterial: Button
-
-    lateinit var fb:FirebaseFirestore
+    lateinit var fb: FirebaseFirestore
 
     lateinit var dataset: MutableList<Exemplar>
     lateinit var adapter: EditExemplaresAdapter
@@ -44,51 +43,35 @@ class AdminBookEditor : AppCompatActivity() {
     lateinit var publicacao: EditText
 
     lateinit var btnCreateExemplar: ImageView
+    lateinit var btnDescartar: Button
 
     private val pickImageLauncher =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-            uri?.let {
-                capa.setImageURI(it)
-            }
+            uri?.let { capa.setImageURI(it) }
         }
-
-    lateinit var btnDescartar: Button
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_admin_book_editor)
 
-        // Instância do Firestore
         fb = Firebase.firestore
+
+        // ===== RECEBENDO O LIVRO SELECIONADO =====
+        bookId = intent.getStringExtra("materialId") ?: ""
+
+        val base64Capa = intent.getStringExtra("capa")
+        val tituloExtra = intent.getStringExtra("titulo")
+        val autorExtra = intent.getStringExtra("autor")
+        val materialExtra = intent.getStringExtra("material")
+        val cduExtra = intent.getStringExtra("cdu")
 
         capa = findViewById(R.id.capa)
         selecionarCapa = findViewById(R.id.selecionarCapa)
-
         arrowBackButtonView = findViewById(R.id.adminEditBookArrowBack)
-
         editarMaterial = findViewById(R.id.editarButton)
         btnDescartar = findViewById(R.id.descartarButton)
-
-        arrowBackButtonView.setOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
-        }
-
-        editarMaterial.setOnClickListener {
-            confirmarEdicao(this)
-        }
-
-        btnDescartar.setOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
-        }
-
-        selecionarCapa.setOnClickListener {
-            pickImageLauncher.launch("image/*")
-        }
-
         btnCreateExemplar = findViewById(R.id.btnCreateExemplar)
 
-        // Dados do material
         titulo = findViewById(R.id.bookTitle)
         material = findViewById(R.id.bookMaterial)
         idioma = findViewById(R.id.bookIdioma)
@@ -98,43 +81,56 @@ class AdminBookEditor : AppCompatActivity() {
         edicao = findViewById(R.id.bookEdicao)
         publicacao = findViewById(R.id.bookPublicacao)
 
-        // RecyclerView de exemplares
+        // ===== SETANDO OS VALORES RECEBIDOS =====
+        titulo.setText(tituloExtra)
+        autor.setText(autorExtra)
+        material.setText(materialExtra)
+        cdu.setText(cduExtra)
+
+        if (!base64Capa.isNullOrEmpty()) {
+            Glide.with(this)
+                .asBitmap()
+                .load(Base64.decode(base64Capa, Base64.DEFAULT))
+                .into(capa)
+        }
+
+        // ===== RECYCLERVIEW DE EXEMPLARES =====
         recyclerView = findViewById(R.id.editExemplaresAdapter)
-
-        // Dataset de exemplares
         dataset = mutableListOf()
-        // Adapter para os exemplares
         adapter = EditExemplaresAdapter(this, dataset)
-
-        // Instância do adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
 
-    }
+        // BOTÕES
+        arrowBackButtonView.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
+        selecionarCapa.setOnClickListener { pickImageLauncher.launch("image/*") }
+        btnDescartar.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
 
-    override fun onStart() {
-        super.onStart()
+        editarMaterial.setOnClickListener { confirmarEdicao(this) }
+        btnCreateExemplar.setOnClickListener { createExemplar(bookId) }
 
-        val prefs = getSharedPreferences("arquivo", MODE_PRIVATE)
-
-        /*
-        prefs.edit()
-            .putString("BOOK_ID", "Ga7CwjMH46qjxaEKFtKf")
-            .apply()
-
-        */
-
-        val bookId = prefs.getString("BOOK_ID", "") ?: ""
-
-        loadExemplares(bookId)
+        // CARREGAR CAMPOS COMPLETOS DO FIRESTORE
         readMaterial(bookId)
-
-        btnCreateExemplar.setOnClickListener {
-            createExemplar(bookId)
-        }
+        loadExemplares(bookId)
     }
 
-    private fun updateMaterial(bookId:String) {
+    // ================================
+    // FIRESTORE
+    // ================================
+
+    private fun readMaterial(bookId: String) {
+        fb.collection("materiais")
+            .document(bookId)
+            .get()
+            .addOnSuccessListener { result ->
+                idioma.setText(result.getString("idioma") ?: "")
+                isbn.setText(result.getString("isbn") ?: "")
+                edicao.setText(result.getString("edicao") ?: "")
+                publicacao.setText(result.getString("publicacao") ?: "")
+            }
+    }
+
+    private fun updateMaterial(bookId: String) {
         fb.collection("materiais")
             .document(bookId)
             .update(
@@ -151,34 +147,13 @@ class AdminBookEditor : AppCompatActivity() {
             )
     }
 
-
-    private fun readMaterial(bookId:String) {
-        fb.collection("materiais")
-            .document(bookId)
-            .get()
-            .addOnSuccessListener { result ->
-                titulo.setText(result.get("titulo").toString())
-                material.setText(result.get("material").toString())
-                idioma.setText(result.get("idioma").toString())
-                isbn.setText(result.get("isbn").toString())
-                autor.setText(result.get("autor").toString())
-                cdu.setText(result.get("cdu").toString())
-                edicao.setText(result.get("edicao").toString())
-                publicacao.setText(result.get("publicacao").toString())
-            }
-    }
-
-
-    private fun loadExemplares(bookId:String) {
+    private fun loadExemplares(bookId: String) {
         fb.collection("materiais")
             .document(bookId)
             .collection("exemplares")
-            .addSnapshotListener { snapshot, e ->
-
+            .addSnapshotListener { snapshot, _ ->
                 if (snapshot != null) {
-
                     dataset.clear()
-
                     for (doc in snapshot) {
                         dataset.add(
                             Exemplar(
@@ -190,13 +165,12 @@ class AdminBookEditor : AppCompatActivity() {
                             )
                         )
                     }
-
                     adapter.notifyDataSetChanged()
                 }
             }
     }
 
-    private fun createExemplar(bookId:String) {
+    private fun createExemplar(bookId: String) {
         fb.collection("materiais")
             .document(bookId)
             .collection("exemplares")
@@ -223,14 +197,9 @@ class AdminBookEditor : AppCompatActivity() {
         val btnCancelar = dialogView.findViewById<Button>(R.id.btnCancelar)
         val btnConfirmar = dialogView.findViewById<Button>(R.id.btnConfirmar)
 
-        btnCancelar.setOnClickListener {
-            dialog.dismiss()
-        }
+        btnCancelar.setOnClickListener { dialog.dismiss() }
 
         btnConfirmar.setOnClickListener {
-            val x = getSharedPreferences("arquivo", MODE_PRIVATE)
-            val bookId = x.getString("BOOK_ID", "") ?: ""
-
             updateMaterial(bookId)
             startActivity(Intent(this, AdminHome::class.java))
             dialog.dismiss()
@@ -238,5 +207,4 @@ class AdminBookEditor : AppCompatActivity() {
 
         dialog.show()
     }
-
 }

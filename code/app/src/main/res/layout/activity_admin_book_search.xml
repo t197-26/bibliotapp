@@ -9,7 +9,7 @@
     android:background="@android:color/white"
     tools:context=".UserBookSearch">
 
-
+    <!-- BOTÃO VOLTAR -->
     <ImageButton
         android:id="@+id/UserBookSearchArrowBack"
         style="@style/ArrowBack"
@@ -21,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_arrow_back" />
 
-
+    <!-- TÍTULO -->
     <TextView
         android:id="@+id/textView24"
         android:layout_width="wrap_content"
@@ -34,7 +34,20 @@
         app:layout_constraintStart_toEndOf="@id/UserBookSearchArrowBack"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- 🔥 RECYCLERVIEW DOS EXEMPLARES -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerAdminBookSearch"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:paddingHorizontal="12dp"
+        android:clipToPadding="false"
+        app:layout_constraintTop_toBottomOf="@id/textView24"
+        app:layout_constraintBottom_toTopOf="@id/searchContainer"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:listitem="@layout/item_book_list_search_user" />
 
+    <!-- BARRA DE BUSCA -->
     <LinearLayout
         android:id="@+id/searchContainer"
         android:layout_width="0dp"
@@ -67,7 +80,5 @@
             android:contentDescription="Buscar"
             android:src="@drawable/ic_search" />
     </LinearLayout>
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
