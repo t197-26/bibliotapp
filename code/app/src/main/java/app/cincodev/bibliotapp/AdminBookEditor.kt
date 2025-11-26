@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.ImageButton
@@ -53,6 +54,7 @@ class AdminBookEditor : AppCompatActivity() {
 
     lateinit var btnDescartar: Button
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_admin_book_editor)
@@ -85,9 +87,6 @@ class AdminBookEditor : AppCompatActivity() {
         }
 
         btnCreateExemplar = findViewById(R.id.btnCreateExemplar)
-        btnCreateExemplar.setOnClickListener {
-            createExemplar()
-        }
 
         // Dados do material
         titulo = findViewById(R.id.bookTitle)
@@ -113,31 +112,31 @@ class AdminBookEditor : AppCompatActivity() {
 
     }
 
-    private fun createExemplar() {
-        fb.collection("materiais")
-            .document("default")
-            .collection("exemplares")
-            .add(
-                mapOf(
-                    "disponibilidade" to "Imediata",
-                    "registro" to "XXXXXX",
-                    "status" to "Disponível",
-                    "suporte" to "Impresso",
-                    "ano" to "XXXX",
-                    "situacao" to "Cativo"
-                )
-            )
-    }
-
     override fun onStart() {
         super.onStart()
-        loadExemplares()
-        readMaterial()
+
+        val prefs = getSharedPreferences("arquivo", MODE_PRIVATE)
+
+        /*
+        prefs.edit()
+            .putString("BOOK_ID", "Ga7CwjMH46qjxaEKFtKf")
+            .apply()
+
+        */
+
+        val bookId = prefs.getString("BOOK_ID", "") ?: ""
+
+        loadExemplares(bookId)
+        readMaterial(bookId)
+
+        btnCreateExemplar.setOnClickListener {
+            createExemplar(bookId)
+        }
     }
 
-    private fun updateMaterial() {
+    private fun updateMaterial(bookId:String) {
         fb.collection("materiais")
-            .document("default")
+            .document(bookId)
             .update(
                 mapOf(
                     "titulo" to titulo.text.toString(),
@@ -153,9 +152,9 @@ class AdminBookEditor : AppCompatActivity() {
     }
 
 
-    private fun readMaterial() {
+    private fun readMaterial(bookId:String) {
         fb.collection("materiais")
-            .document("default")
+            .document(bookId)
             .get()
             .addOnSuccessListener { result ->
                 titulo.setText(result.get("titulo").toString())
@@ -170,9 +169,9 @@ class AdminBookEditor : AppCompatActivity() {
     }
 
 
-    private fun loadExemplares() {
+    private fun loadExemplares(bookId:String) {
         fb.collection("materiais")
-            .document("default")
+            .document(bookId)
             .collection("exemplares")
             .addSnapshotListener { snapshot, e ->
 
@@ -197,6 +196,22 @@ class AdminBookEditor : AppCompatActivity() {
             }
     }
 
+    private fun createExemplar(bookId:String) {
+        fb.collection("materiais")
+            .document(bookId)
+            .collection("exemplares")
+            .add(
+                mapOf(
+                    "disponibilidade" to "Imediata",
+                    "registro" to "XXXXXX",
+                    "status" to "Disponível",
+                    "suporte" to "Impresso",
+                    "ano" to "XXXX",
+                    "situacao" to "Cativo"
+                )
+            )
+    }
+
     private fun confirmarEdicao(context: android.content.Context) {
         val dialogView = LayoutInflater.from(context)
             .inflate(R.layout.dialog_confirmation_edit_material, null)
@@ -213,7 +228,10 @@ class AdminBookEditor : AppCompatActivity() {
         }
 
         btnConfirmar.setOnClickListener {
-            updateMaterial()
+            val x = getSharedPreferences("arquivo", MODE_PRIVATE)
+            val bookId = x.getString("BOOK_ID", "") ?: ""
+
+            updateMaterial(bookId)
             startActivity(Intent(this, AdminHome::class.java))
             dialog.dismiss()
         }
