@@ -10,7 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class DigitalizacoesAdapter(private val context: Context, private val dataSet: Array<DigitalizacaoItem>) :
+class DigitalizacoesAdapter(private val context: Context, private val dataSet: MutableList<DigitalizacaoItem>) :
     RecyclerView.Adapter<DigitalizacoesAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {

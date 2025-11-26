@@ -1,5 +1,6 @@
 package app.cincodev.bibliotapp
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageButton
@@ -8,6 +9,9 @@ import android.widget.TextView
 import android.util.Base64
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.util.Log
+import android.widget.Button
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -33,14 +37,13 @@ class UserBookDetail : AppCompatActivity() {
     lateinit var bookEdicao: TextView
     lateinit var bookPublicacao: TextView
     lateinit var recyclerView: RecyclerView
+    lateinit var requestDigitalizationButton: Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_book_detail)
 
-        // Instância do Firebase
         fb = Firebase.firestore
 
-        // Campos de detalhamento de material
         etBookTitle = findViewById(R.id.bookTitle)
         etBookMaterial = findViewById(R.id.bookMaterial)
         bookIdioma = findViewById(R.id.bookIdioma)
@@ -50,14 +53,73 @@ class UserBookDetail : AppCompatActivity() {
         bookEdicao = findViewById(R.id.bookEdicao)
         bookPublicacao = findViewById(R.id.bookPublicacao)
         bookCapa = findViewById(R.id.bookCover)
+        requestDigitalizationButton = findViewById(R.id.requestDigitalizationButton)
+
+        val x = getSharedPreferences("arquivo", MODE_PRIVATE)
+        val bookId = x.getString("BOOK_ID", "default") ?: "default"
+        val user = x.getString("BOOK_ID", "default") ?: "default"
+
+        requestDigitalizationButton.setOnClickListener {
+            val dialogBuilder: AlertDialog.Builder = AlertDialog.Builder(this@UserBookDetail)
+            val pagesInput: EditText = EditText(this).apply {
+                hint = "1-4, 10, 20"
+            }
+
+            dialogBuilder
+                .setView(pagesInput)
+                .setTitle("Páginas que precisam ser digitalizadas")
+                .setMessage("Especique quais páginas precisam ser digitalizadas utilizando hífen para intervalos de páginas (1-4), ou apenas especificando uma página específica (20), separando as instruções por virgulas")
+                .setPositiveButton("Solicitar") { dialog, which ->
+                    val validPagesInput = mutableListOf<String>()
+
+                    pagesInput.text.toString().split(",").map { it.trim() }.forEach { pages ->
+                        when {
+                            Regex("""^\d+$""").matches(pages) -> {
+                                val singlePage = pages.toInt()
+
+                                validPagesInput.add(singlePage.toString())
+                            }
+
+                            Regex("""^\d+-\d+$""").matches(pages) -> {
+                                val (start, end) = pages.split("-").map { it.toInt() }
+
+                                validPagesInput.add("${start}-${end}")
+                            }
+                        }
+                    }
+
+                    getSharedPreferences("bibliotapp_shared_preferences", MODE_PRIVATE).let {
+                        val digitalizationOrder = hashMapOf(
+                            "id" to "",
+                            "material_id" to bookId,
+                            "requisitante" to (it.getString("matricula", "-") ?: "-"),
+                            "paginas" to validPagesInput.joinToString(", "),
+                            "registro" to "-",
+                            "status" to "Em fila"
+                        )
+
+                        fb.collection("digitalizacoes")
+                            .document()
+                            .set(digitalizationOrder)
+                            .addOnSuccessListener { Log.d("Firestore", "DocumentSnapshot successfully written!") }
+                            .addOnFailureListener { e -> Log.w("Firestore", "Error writing document", e) }
+                    }
+
+
+                    dialog.dismiss()
+                }
+                .setNegativeButton("Cancelar") { dialog, which ->
+                    dialog.dismiss()
+                }
+
+
+            dialogBuilder.create().show()
+        }
 
         arrowBackButtonView = findViewById(R.id.userBookDetailArrowBack)
         arrowBackButtonView.setOnClickListener {
             startActivity(Intent(this, UserHome::class.java))
         }
-
-        val x = getSharedPreferences("arquivo", MODE_PRIVATE)
-        val bookId = x.getString("BOOK_ID", "default") ?: "default"
 
         // Chamada dos detalhes do material
         getBookDetails(bookId)
