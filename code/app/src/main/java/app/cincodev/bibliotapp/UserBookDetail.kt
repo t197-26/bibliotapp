@@ -18,6 +18,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.type.DateTime
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class UserBookDetail : AppCompatActivity() {
 
@@ -89,13 +92,18 @@ class UserBookDetail : AppCompatActivity() {
                     }
 
                     getSharedPreferences("bibliotapp_shared_preferences", MODE_PRIVATE).let {
+                        val today = LocalDate.now()
+                        val dateTimeFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+                        val formattedDate = today.format(dateTimeFormat)
+
                         val digitalizationOrder = hashMapOf(
                             "id" to "",
                             "material_id" to bookId,
                             "requisitante" to (it.getString("matricula", "-") ?: "-"),
                             "paginas" to validPagesInput.joinToString(", "),
                             "registro" to "-",
-                            "status" to "Em fila"
+                            "status" to "Em fila",
+                            "abertoEm" to formattedDate
                         )
 
                         fb.collection("digitalizacoes")

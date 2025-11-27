@@ -8,4 +8,5 @@ data class DigitalizacaoItem(
     val paginas: String,
     val registro: String,
     var status: String,
+    var abertoEm: String? = null,
 )
