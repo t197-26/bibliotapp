@@ -136,9 +136,18 @@ class UserDigitalizations : AppCompatActivity() {
                                                                 Toast.makeText(this, "Pedido cancelado com sucesso", Toast.LENGTH_SHORT).show()
 
                                                                 val index = digitalizationRequestsWithMaterial.indexOfFirst { (request, material, onClickCancelButton) -> request.id == digitalizationRequest.id }
-                                                                digitalizationRequestsWithMaterial[index].request.status = "Cancelado"
+                                                                val indexInFilteredBySearch = filteredBySearchRequestsWithMaterial.indexOfFirst { (request, material, onClickCancelButton) -> request.id == digitalizationRequest.id }
+                                                                val indexInFilteredByStatus = filteredByStatusRequestsWithMaterial.indexOfFirst { (request, material, onClickCancelButton) -> request.id == digitalizationRequest.id }
 
-                                                                recyclerView.adapter?.notifyItemRangeChanged(index, 1)
+                                                                digitalizationRequestsWithMaterial[index].request.status = "Cancelado"
+                                                                if (indexInFilteredBySearch >= 0) {
+                                                                    filteredBySearchRequestsWithMaterial[indexInFilteredBySearch].request.status = "Cancelado"
+                                                                }
+                                                                if (indexInFilteredByStatus >= 0) {
+                                                                    filteredByStatusRequestsWithMaterial[indexInFilteredByStatus].request.status = "Cancelado"
+                                                                }
+
+                                                                recyclerView.adapter?.notifyDataSetChanged()
                                                             }.addOnFailureListener {
                                                                 Toast.makeText(this, "Ocorreu um erro e não foi possível cancelar seu pedido de digitalização", Toast.LENGTH_SHORT).show()
                                                         }
