@@ -153,7 +153,13 @@ class UserHome : AppCompatActivity() {
 
                             val titulo = material.get("titulo").toString()
 
-                            val devolucao = "$diferenca_dias dia(s) restante(s)"
+                            var devolucao = ""
+                            if (diferenca_dias < 0) {
+                                devolucao = "Atrasado"
+                            } else {
+                                devolucao = "$diferenca_dias dia(s) restante(s)"
+                            }
+
                             //val devolucao = material.get("devolucao").toString()
                             val capaBase64 = material.get("capa").toString()
 
