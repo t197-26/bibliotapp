@@ -53,6 +53,8 @@ class AdminLoanSearch : AppCompatActivity() {
     }
 
     override fun onStart() {
+        loans.clear()
+
         db
             .collection("emprestimos")
             .get()
@@ -70,7 +72,7 @@ class AdminLoanSearch : AppCompatActivity() {
                             document.id,
                             document["users_id"] as String,
                             (if (daysOverdue < 0) "0" else daysOverdue.toString()) + " dia(s)",
-                            if (returnDate.before(todayDate)) "Em dia" else "Atrasado"
+                            if (returnDate.after(todayDate)) "Em dia" else "Atrasado"
                         )
                     )
                 }

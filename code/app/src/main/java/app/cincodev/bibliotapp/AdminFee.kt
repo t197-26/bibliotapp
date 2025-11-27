@@ -1,6 +1,7 @@
 package app.cincodev.bibliotapp
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageButton
 import android.widget.Button
 import android.widget.TextView
@@ -54,7 +55,8 @@ class AdminFee : AppCompatActivity() {
 
                 val devolverEm = doc.getTimestamp("devolver_em")
                 val emprestadoEm = doc.getTimestamp("emprestado_em")
-
+                Log.i("testeMulta", devolverEm.toString())
+                Log.i("testeMulta", emprestadoEm.toString())
                 if (devolverEm != null && emprestadoEm != null) {
                     calcularMulta(devolverEm, emprestadoEm)
                 }
@@ -75,7 +77,6 @@ class AdminFee : AppCompatActivity() {
         val diasMulta = if (diasAtraso > 0) diasAtraso else 0
 
         val multa = diasMulta * 1.50
-
         textDelayDay.text = "$diasMulta dias"
         textFeeAmount.text = "R$ ${String.format("%.2f", multa)}"
         textReturnDate.text = formatarDataLegivel(dataDevolver)
