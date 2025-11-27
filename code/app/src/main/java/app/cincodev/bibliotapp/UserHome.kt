@@ -110,7 +110,7 @@ class UserHome : AppCompatActivity() {
                     val nome = doc.getString("name") ?: "Usuário"
 
                     // Incrementa no TextView (não substitui)
-                    welcome.text = welcome.text.toString() + " " + nome
+                    welcome.text = welcome.text.toString() + " " + nome.split(" ")[0]
                 }
             }
             .addOnFailureListener { e ->
