@@ -18,6 +18,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import android.widget.EditText
+import androidx.core.content.edit
 
 class AdminBookEditor : AppCompatActivity() {
 
@@ -64,6 +65,9 @@ class AdminBookEditor : AppCompatActivity() {
         val autorExtra = intent.getStringExtra("autor")
         val materialExtra = intent.getStringExtra("material")
         val cduExtra = intent.getStringExtra("cdu")
+
+        val prefs = getSharedPreferences("arquivo",MODE_PRIVATE)
+        prefs.edit { putString("BOOK_ID", bookId) }
 
         capa = findViewById(R.id.capa)
         selecionarCapa = findViewById(R.id.selecionarCapa)
