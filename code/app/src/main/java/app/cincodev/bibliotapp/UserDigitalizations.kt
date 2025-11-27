@@ -3,12 +3,14 @@ package app.cincodev.bibliotapp
 import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
@@ -23,6 +25,7 @@ class UserDigitalizations : AppCompatActivity() {
     lateinit var chipDigitalizando: Chip
     lateinit var chipRecusado: Chip
     lateinit var recyclerView: RecyclerView
+    lateinit var searchEditText: EditText
     private val digitalizationRequestsWithMaterial: MutableList<DigitalizationRequestWithMaterial> =
         mutableListOf()
 
@@ -51,6 +54,7 @@ class UserDigitalizations : AppCompatActivity() {
         arrowBackButtonView.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
+        searchEditText = findViewById(R.id.searchEditText)
 
         chipEmFila.setOnClickListener {
             handleOnStatusChipFilterClick("Em fila")
@@ -63,6 +67,9 @@ class UserDigitalizations : AppCompatActivity() {
         }
         chipDigitalizando.setOnClickListener {
             handleOnStatusChipFilterClick("Digitalizando")
+        }
+        searchEditText.addTextChangedListener { text ->
+            handleOnSearchChange(text.toString())
         }
 
         recyclerView = findViewById(R.id.recyclerDigitalizacoes)
@@ -187,5 +194,6 @@ class UserDigitalizations : AppCompatActivity() {
         }
 
         val filteredDataset = dataset.filter { it -> it.material.nome.lowercase().contains(search.lowercase()) }
+        recyclerView.swapAdapter(DigitalizacoesAdapter(this@UserDigitalizations, filteredDataset.toMutableList()), false)
     }
 }

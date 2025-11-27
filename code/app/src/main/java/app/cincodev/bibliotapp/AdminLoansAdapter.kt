@@ -11,10 +11,12 @@ import android.widget.PopupWindow
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.FirebaseFirestore
 
 class AdminLoansAdapter(
-    private val dataSet: Array<Loan>
+    private val dataSet: MutableList<Loan>
 ) : RecyclerView.Adapter<AdminLoansAdapter.ViewHolder>() {
+    private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val registro: TextView = view.findViewById(R.id.emprestimoRegistro)
@@ -61,7 +63,7 @@ class AdminLoansAdapter(
         }
 
         popupView.findViewById<Button>(R.id.btnReceber).setOnClickListener {
-            confirmarRecebimento(context)
+            confirmarRecebimento(context, dataSet[position].registro)
             popupWindow.dismiss()
         }
 
@@ -74,7 +76,7 @@ class AdminLoansAdapter(
         popupWindow.showAsDropDown(anchorView, -85, 0)
     }
 
-    private fun confirmarRecebimento(context: android.content.Context) {
+    private fun confirmarRecebimento(context: android.content.Context, loadId: String) {
         val dialogView = LayoutInflater.from(context)
             .inflate(R.layout.dialog_confirmation_loan_received, null)
 
@@ -90,6 +92,19 @@ class AdminLoansAdapter(
         }
 
         btnConfirmar.setOnClickListener {
+            db
+                .collection("emprestimos")
+                .document(loadId).delete()
+                .addOnSuccessListener {
+                    Toast.makeText(context, "Emprestimo fechado com sucesso", Toast.LENGTH_LONG).show()
+                    dataSet.removeIf { loan ->  loan.registro == loadId }
+
+                    this.notifyDataSetChanged()
+                }
+                .addOnFailureListener {
+                    Toast.makeText(context, "Ocorreu um erro ao fechar o emprestimo. Tente novamente", Toast.LENGTH_LONG).show()
+                }
+
             dialog.dismiss()
         }
 
