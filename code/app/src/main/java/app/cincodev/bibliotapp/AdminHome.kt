@@ -36,9 +36,9 @@ class AdminHome : AppCompatActivity() {
             startActivity(Intent(this, AdminBookRegister::class.java))
         }
 
-        EditarMaterialConstraintLayout = findViewById(R.id.AdminHomeBodyEditarMaterialConstraintLayout)
+        EditarMaterialConstraintLayout = findViewById(R.id.AdminHomeBodyBuscaConstraintLayout)
         EditarMaterialConstraintLayout.setOnClickListener {
-            startActivity(Intent(this, AdminBookEditor::class.java))
+            startActivity(Intent(this, AdminBookSearch::class.java))
         }
 
         EmprestimosConstraintLayout = findViewById(R.id.AdminHomeBodyEmprestimosConstraintLayout)
@@ -49,11 +49,6 @@ class AdminHome : AppCompatActivity() {
         ReservasEspacoConstraintLayout = findViewById(R.id.AdminHomeBodyReservasEspacoConstraintLayout)
         ReservasEspacoConstraintLayout.setOnClickListener {
             startActivity(Intent(this, AdminSpaceBookingSearch::class.java))
-        }
-
-        BuscaConstraintLayout = findViewById(R.id.AdminHomeBodyBuscaConstraintLayout)
-        BuscaConstraintLayout.setOnClickListener {
-            startActivity(Intent(this, AdminBookSearch::class.java))
         }
 
     }

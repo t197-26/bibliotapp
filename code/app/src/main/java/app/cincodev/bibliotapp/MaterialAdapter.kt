@@ -11,15 +11,21 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class MaterialAdapter(
-    private val lista: List<Material>
+    private val fullList: MutableList<Material>
 ) : RecyclerView.Adapter<MaterialAdapter.MaterialViewHolder>() {
 
+    private val filteredList = mutableListOf<Material>()
+
+    init {
+        filteredList.addAll(fullList)
+    }
+
     inner class MaterialViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val img = view.findViewById<ImageView>(R.id.material_image)
-        val nome = view.findViewById<TextView>(R.id.material_name)
-        val tipo = view.findViewById<TextView>(R.id.material_type)
-        val codigo = view.findViewById<TextView>(R.id.material_code)
-        val autor = view.findViewById<TextView>(R.id.material_writer)
+        val img: ImageView = view.findViewById(R.id.material_image)
+        val nome: TextView = view.findViewById(R.id.material_name)
+        val tipo: TextView = view.findViewById(R.id.material_type)
+        val codigo: TextView = view.findViewById(R.id.material_code)
+        val autor: TextView = view.findViewById(R.id.material_writer)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MaterialViewHolder {
@@ -29,14 +35,13 @@ class MaterialAdapter(
     }
 
     override fun onBindViewHolder(holder: MaterialViewHolder, position: Int) {
-        val item = lista[position]
+        val item = filteredList[position]
 
         holder.nome.text = item.titulo
         holder.tipo.text = "Tipo: ${item.material}"
         holder.codigo.text = "ISBN: ${item.isbn}"
         holder.autor.text = "Autor: ${item.autor}"
 
-        // --- BASE64 IMAGE ---
         if (!item.capa.isNullOrEmpty()) {
             try {
                 val bytes = android.util.Base64.decode(item.capa, android.util.Base64.DEFAULT)
@@ -59,8 +64,33 @@ class MaterialAdapter(
         }
     }
 
+    override fun getItemCount() = filteredList.size
+    fun atualizarLista(novaLista: List<Material>) {
+        fullList.clear()
+        fullList.addAll(novaLista)
 
+        filteredList.clear()
+        filteredList.addAll(novaLista)
 
-    override fun getItemCount() = lista.size
+        notifyDataSetChanged()
+    }
+
+    fun filtrar(texto: String) {
+        val query = texto.lowercase()
+
+        filteredList.clear()
+
+        if (query.isEmpty()) {
+            filteredList.addAll(fullList)
+        } else {
+            filteredList.addAll(
+                fullList.filter { item ->
+                    item.titulo.lowercase().contains(query) ||
+                            item.autor.lowercase().contains(query)
+                }
+            )
+        }
+
+        notifyDataSetChanged()
+    }
 }
-

@@ -71,7 +71,8 @@
             <Button
                 android:id="@+id/estante3"
                 style="@style/EstanteButton"
-                android:text="3" />
+                android:text="3"
+                android:drawableTop="@drawable/ic_track" />
 
             <Button
                 android:id="@+id/estante4"
