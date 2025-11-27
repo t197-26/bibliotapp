@@ -13,24 +13,6 @@ class UserSpaceMap : AppCompatActivity() {
 
     lateinit var arrowBackButtonView: ImageButton
 
-    private val nomesEstantes = listOf(
-        "Literatura Brasileira",
-        "Literatura Estrangeira",
-        "Tecnologia e Informática",
-        "História Geral",
-        "História do Brasil",
-        "Geografia e Geopolítica",
-        "Biologia e Ciências Naturais",
-        "Matemática e Lógica",
-        "Física e Química",
-        "Filosofia",
-        "Psicologia",
-        "Artes e Música",
-        "Saúde e Medicina",
-        "Direito e Legislação",
-        "Administração e Economia"
-    )
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_space_map)
@@ -47,23 +29,17 @@ class UserSpaceMap : AppCompatActivity() {
             val estanteId = resources.getIdentifier("estante$i", "id", packageName)
             val botaoEstante = findViewById<Button>(estanteId)
 
-            val nomeEstante = nomesEstantes[i - 1]
-            botaoEstante.text = nomeEstante
-
             botaoEstante?.setOnClickListener {
                 animarClique(botaoEstante)
                 mostrarPopupEstante(i)
             }
         }
-
     }
 
     private fun mostrarPopupEstante(numeroEstante: Int) {
-        val nome = nomesEstantes[numeroEstante - 1]
-
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Estante selecionada")
-        builder.setMessage("Você clicou na estante: $nome")
+        builder.setMessage("Você clicou na estante $numeroEstante.")
         builder.setPositiveButton("OK") { dialog, _ ->
             dialog.dismiss()
         }
@@ -71,6 +47,7 @@ class UserSpaceMap : AppCompatActivity() {
         val dialog = builder.create()
         dialog.show()
     }
+
     private fun animarClique(botao: Button) {
         val corOriginal = botao.background
         botao.setBackgroundColor(ContextCompat.getColor(this, android.R.color.darker_gray))

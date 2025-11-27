@@ -18,7 +18,6 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import androidx.core.content.edit
 
 class LoginActivity : AppCompatActivity() {
 
@@ -130,7 +129,6 @@ class LoginActivity : AppCompatActivity() {
             }
         })
 
-
         accessButton.setOnClickListener {
             val db = Firebase.firestore
             val docRef = db.collection("users")
@@ -143,12 +141,6 @@ class LoginActivity : AppCompatActivity() {
                 val isCorrectPassword = checkPassword(document, passwordEditTextTextPassword.text.toString())
 
                 if (document.exists() && isCorrectPassword) {
-                    getSharedPreferences("bibliotapp_shared_preferences", MODE_PRIVATE)
-                        .edit {
-                            // dados de sessao podem ser salvos aqui
-                            putString("matricula", matriculaEditText.text.toString())
-                        }
-
                     if (document.get("isAdmin") == true) {
                         startActivity(adminIntent)
                         return@launch

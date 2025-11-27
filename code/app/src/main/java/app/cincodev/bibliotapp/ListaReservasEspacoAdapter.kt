@@ -1,57 +1,46 @@
 package app.cincodev.bibliotapp
 
-import android.app.AlertDialog
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class ListaReservasEspacoAdapter(private val context: Context, private val dataSet: Array<ReservaItem>) :
-    RecyclerView.Adapter<ListaReservasEspacoAdapter.ViewHolder>() {
+class ListaReservasEspacoAdapter(
+    private val context: Context,
+    private val dataset: List<ReservaItem>, // Mudado para List para ser mais flexível que Array
+    private val onDeleteClick: (String) -> Unit // Função que a Activity vai passar para deletar
+) : RecyclerView.Adapter<ListaReservasEspacoAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        //val requisitante: TextView = view.findViewById(R.id.dataRequisitante)
-
-        val sala_componente: TextView = view.findViewById(R.id.salaReserva)
-        val entrada_componente: TextView = view.findViewById(R.id.entradaReserva)
-        val saida_componente: TextView = view.findViewById(R.id.saidaReserva)
-        val botao_cancelar: ImageButton = view.findViewById(R.id.buttonCancelar)
+        val tvTitulo: TextView = view.findViewById(R.id.tvTitle)
+        val tvEntrada: TextView = view.findViewById(R.id.tvSubtitle1)
+        val tvSaida: TextView = view.findViewById(R.id.tvSubtitle2)
+        // Certifique-se de adicionar este ID no seu item_loan.xml
+        val btnDelete: ImageButton = view.findViewById(R.id.btnDelete)
     }
 
-    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(viewGroup.context)
-            .inflate(R.layout.item_card_reserva_espaco, viewGroup, false)
-
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_loan, parent, false)
         return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        viewHolder.sala_componente.text = dataSet[position].sala
-        viewHolder.entrada_componente.text = dataSet[position].entrada
-        viewHolder.saida_componente.text = dataSet[position].saida
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val item = dataset[position]
 
-        viewHolder.botao_cancelar.setOnClickListener {
-            val builder = AlertDialog.Builder(context)
-            builder.setTitle("Cancelar reserva")
-            builder.setMessage("Tem certeza que deseja cancelar sua reserva?")
+        holder.tvTitulo.text = item.titulo
+        holder.tvEntrada.text = item.dataEntrada
+        holder.tvSaida.text = item.dataSaida
 
-            builder.setPositiveButton("Cancelar") { dialog, _ ->
-                dialog.dismiss()
-            }
-
-            builder.setNegativeButton("Cancelar") { dialog, _ ->
-                dialog.dismiss()
-            }
-
-            val dialog = builder.create()
-            dialog.show()
+        // Configura o clique na lixeira
+        holder.btnDelete.setOnClickListener {
+            // Chama a função da Activity passando o ID da reserva
+            onDeleteClick(item.id)
         }
     }
 
-    override fun getItemCount() = dataSet.size
-
+    override fun getItemCount(): Int = dataset.size
 }

@@ -13,8 +13,9 @@ class UserFailedBooking : AppCompatActivity() {
         setContentView(R.layout.activity_user_failed_booking)
 
         lifecycleScope.launch {
-            delay(2000) // 2 seconds
-            val intent = Intent(this@UserFailedBooking, UserSuccesfulBooking::class.java)
+            delay(2000) // Espera 2 segundos
+
+            val intent = Intent(this@UserFailedBooking, SelectSpace::class.java)
             startActivity(intent)
             finish()
         }

@@ -1,28 +1,32 @@
 package app.cincodev.bibliotapp
 
 import android.os.Bundle
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-
-data class Reserva(
-    val requisitante: String,
-    val local: String,
-    val checkIn: String,
-    val checkOut: String
-)
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.FirebaseFirestore
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class AdminSpaceBookingSearch : AppCompatActivity() {
 
     lateinit var arrowBackButtonView: ImageButton
     private lateinit var reservaAdapter: ReservaAdapter
+
+    private val listaCompleta = mutableListOf<ReservaModel>()
+    private val listaFiltrada = mutableListOf<ReservaModel>()
+    private val db = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,32 +37,96 @@ class AdminSpaceBookingSearch : AppCompatActivity() {
             onBackPressedDispatcher.onBackPressed()
         }
 
-
-        val reservas = listOf(
-            Reserva("2420382", "C10", "22/09/2025 08:00", "22/09/2025 10:00"),
-            Reserva("2320466", "C11", "23/09/2025 10:00", "23/09/2025 12:00"),
-            Reserva("2320478", "C12", "24/09/2025 09:00", "24/09/2025 11:00"),
-            Reserva("2298120", "C13", "25/09/2025 07:00", "25/09/2025 09:00")
-        )
-
-        // Configuração do RecyclerView
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        reservaAdapter = ReservaAdapter(reservas) { reserva ->
-            Toast.makeText(
-                this,
-                "Reserva de ${reserva.local} excluída!",
-                Toast.LENGTH_SHORT
-            ).show()
+
+        reservaAdapter = ReservaAdapter(listaFiltrada) { reserva ->
+            confirmarExclusao(reserva)
         }
         recyclerView.adapter = reservaAdapter
+
+        carregarReservasDoFirebase()
+        configurarPesquisa()
+    }
+
+    private fun carregarReservasDoFirebase() {
+        db.collection("reservas")
+            .orderBy("startTime")
+            .get()
+            .addOnSuccessListener { documents ->
+                listaCompleta.clear()
+                listaFiltrada.clear()
+
+                for (document in documents) {
+                    val reserva = document.toObject(ReservaModel::class.java)
+                    reserva.id = document.id
+                    listaCompleta.add(reserva)
+                }
+
+                listaFiltrada.addAll(listaCompleta)
+                reservaAdapter.notifyDataSetChanged()
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Erro ao carregar: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    private fun configurarPesquisa() {
+        val etPesquisa = findViewById<EditText>(R.id.etPesquisa)
+        etPesquisa.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                val texto = s.toString().lowercase()
+                filtrarLista(texto)
+            }
+        })
+    }
+
+    private fun filtrarLista(texto: String) {
+        listaFiltrada.clear()
+        if (texto.isEmpty()) {
+            listaFiltrada.addAll(listaCompleta)
+        } else {
+            for (item in listaCompleta) {
+                // Pesquisa por: Nome da Sala OU Matrícula OU UserID
+                if (item.spaceName.lowercase().contains(texto) ||
+                    item.matricula.lowercase().contains(texto) ||
+                    item.userId.lowercase().contains(texto)) {
+                    listaFiltrada.add(item)
+                }
+            }
+        }
+        reservaAdapter.notifyDataSetChanged()
+    }
+
+    private fun confirmarExclusao(reserva: ReservaModel) {
+        AlertDialog.Builder(this)
+            .setTitle("Excluir Reserva")
+            .setMessage("Tem certeza que deseja cancelar a reserva de ${reserva.spaceName}?")
+            .setPositiveButton("Sim") { _, _ -> deletarReserva(reserva) }
+            .setNegativeButton("Não", null)
+            .show()
+    }
+
+    private fun deletarReserva(reserva: ReservaModel) {
+        db.collection("reservas").document(reserva.id)
+            .delete()
+            .addOnSuccessListener {
+                Toast.makeText(this, "Reserva excluída!", Toast.LENGTH_SHORT).show()
+                listaCompleta.remove(reserva)
+                listaFiltrada.remove(reserva)
+                reservaAdapter.notifyDataSetChanged()
+            }
     }
 }
-    class ReservaAdapter(
-        private val reservas: List<Reserva>,
-        private val onDeleteClick: (Reserva) -> Unit
-    ) : RecyclerView.Adapter<ReservaAdapter.ReservaViewHolder>() {
+class ReservaAdapter(
+    private val reservas: List<ReservaModel>,
+    private val onDeleteClick: (ReservaModel) -> Unit
+) : RecyclerView.Adapter<ReservaAdapter.ReservaViewHolder>() {
 
+    private val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale("pt", "BR"))
 
     class ReservaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvRequisitante: TextView = itemView.findViewById(R.id.tvRequisitante)
@@ -69,22 +137,30 @@ class AdminSpaceBookingSearch : AppCompatActivity() {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReservaViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-        val view = inflater.inflate(R.layout.item_booking, parent, false)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_booking, parent, false)
         return ReservaViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ReservaViewHolder, position: Int) {
         val reserva = reservas[position]
-        holder.tvRequisitante.text = "Requisitante: ${reserva.requisitante}"
-        holder.tvLocal.text = "Local: ${reserva.local}"
-        holder.tvCheckIn.text = "Check-in: ${reserva.checkIn}"
-        holder.tvCheckOut.text = "Check-out: ${reserva.checkOut}"
+
+        val dataInicio = if (reserva.startTime != null) sdf.format(reserva.startTime!!.toDate()) else "--"
+        val dataFim = if (reserva.endTime != null) sdf.format(reserva.endTime!!.toDate()) else "--"
 
 
-        holder.btnExcluir.setOnClickListener {
-            onDeleteClick(reserva)
+        val textoIdentificacao = if (reserva.matricula.isNotEmpty()) {
+            "Matrícula: ${reserva.matricula}"
+        } else {
+            "ID: ${reserva.userId}"
         }
+
+        holder.tvRequisitante.text = textoIdentificacao
+        holder.tvLocal.text = "Local: ${reserva.spaceName}"
+        holder.tvCheckIn.text = "Check-in: $dataInicio"
+        holder.tvCheckOut.text = "Check-out: $dataFim"
+
+        holder.btnExcluir.setOnClickListener { onDeleteClick(reserva) }
     }
 
     override fun getItemCount(): Int = reservas.size

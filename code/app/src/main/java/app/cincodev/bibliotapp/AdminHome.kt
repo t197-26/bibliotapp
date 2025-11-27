@@ -15,7 +15,6 @@ class AdminHome : AppCompatActivity() {
     lateinit var EditarMaterialConstraintLayout : ConstraintLayout
     lateinit var EmprestimosConstraintLayout : ConstraintLayout
     lateinit var ReservasEspacoConstraintLayout : ConstraintLayout
-    lateinit var BuscaConstraintLayout : ConstraintLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,9 +35,9 @@ class AdminHome : AppCompatActivity() {
             startActivity(Intent(this, AdminBookRegister::class.java))
         }
 
-        EditarMaterialConstraintLayout = findViewById(R.id.AdminHomeBodyBuscaConstraintLayout)
+        EditarMaterialConstraintLayout = findViewById(R.id.AdminHomeBodyEditarMaterialConstraintLayout)
         EditarMaterialConstraintLayout.setOnClickListener {
-            startActivity(Intent(this, AdminBookSearch::class.java))
+            startActivity(Intent(this, AdminBookEditor::class.java))
         }
 
         EmprestimosConstraintLayout = findViewById(R.id.AdminHomeBodyEmprestimosConstraintLayout)

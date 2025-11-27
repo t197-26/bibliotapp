@@ -51,9 +51,8 @@ class AdminEditExemplar : AppCompatActivity() {
         btnSalvar.setOnClickListener {
             val x = getSharedPreferences("arquivo", MODE_PRIVATE)
             val editExemplarId = x.getString("EDIT_EXEMPLAR_ID", "") ?: ""
-            val bookId = x.getString("BOOK_ID", "") ?: ""
 
-            updateExemplar(editExemplarId, bookId)
+            updateExemplar(editExemplarId)
 
             onBackPressedDispatcher.onBackPressed()
         }
@@ -65,17 +64,15 @@ class AdminEditExemplar : AppCompatActivity() {
 
         // Aposentar exemplar
         btnAposentar.setOnClickListener {
-            val x = getSharedPreferences("arquivo", MODE_PRIVATE)
-            val bookId = x.getString("BOOK_ID", "") ?: ""
-            aposentar(this, bookId)
+            aposentar(this)
         }
 
     }
 
-    private fun updateExemplar(exemplarId: String, bookId:String) {
+    private fun updateExemplar(exemplarId: String) {
 
         fb.collection("materiais")
-            .document(bookId)
+            .document("default")
             .collection("exemplares")
             .document(exemplarId)
             .update(
@@ -87,15 +84,15 @@ class AdminEditExemplar : AppCompatActivity() {
             )
     }
 
-    private fun deleteExemplar(exemplarId: String, bookId:String) {
+    private fun deleteExemplar(exemplarId: String) {
         fb.collection("materiais")
-            .document(bookId)
+            .document("default")
             .collection("exemplares")
             .document(exemplarId)
             .delete()
     }
 
-    private fun aposentar(context: android.content.Context, bookId:String) {
+    private fun aposentar(context: android.content.Context) {
         val dialogView = LayoutInflater.from(context)
             .inflate(R.layout.dialog_confirmation_retire_exemplar, null)
 
@@ -114,7 +111,7 @@ class AdminEditExemplar : AppCompatActivity() {
             // Confirma aposentadoria
             val x = getSharedPreferences("arquivo", MODE_PRIVATE)
             val editExemplarId = x.getString("EDIT_EXEMPLAR_ID", "") ?: ""
-            deleteExemplar(editExemplarId, bookId)
+            deleteExemplar(editExemplarId)
             onBackPressedDispatcher.onBackPressed()
         }
 

@@ -2,23 +2,16 @@ package app.cincodev.bibliotapp
 
 import android.app.AlertDialog
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Color
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.firestore.FirebaseFirestore
-import kotlin.io.encoding.Base64
 
-class DigitalizacoesAdapter(private val context: Context, private val dataSet: MutableList<DigitalizationRequestWithMaterial>) :
+class DigitalizacoesAdapter(private val context: Context, private val dataSet: Array<DigitalizacaoItem>) :
     RecyclerView.Adapter<DigitalizacoesAdapter.ViewHolder>() {
-    private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val imgCapa: ImageView = view.findViewById(R.id.imgCover)
@@ -38,21 +31,13 @@ class DigitalizacoesAdapter(private val context: Context, private val dataSet: M
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val item = dataSet[position]
 
-        viewHolder.titulo.text = item.material.titulo
-        viewHolder.dataPedido.text = "Pedido em: ${item.request.abertoEm ?: ""}"
-        viewHolder.paginas.text = "Páginas: ${item.request.paginas}"
-        viewHolder.status.text = item.request.status
-
-        val capaBase64 = item.material.capa
-        if (capaBase64.isNotEmpty()) {
-            val bitmap = decodeBase64ToBitmap(capaBase64)
-            if (bitmap != null) {
-                viewHolder.imgCapa.setImageBitmap(bitmap)
-            }
-        }
+        viewHolder.titulo.text = item.registro
+        viewHolder.dataPedido.text = "Pedido em: ${item.registro}"
+        viewHolder.paginas.text = "Páginas: ${item.paginas}"
+        viewHolder.status.text = item.status
 
 
-        when (item.request.status) {
+        when (item.status) {
             "Em fila" -> {
                 viewHolder.status.setBackgroundColor(Color.parseColor("#BBDEFB")) // Light Blue
                 viewHolder.status.setTextColor(Color.BLACK)
@@ -76,17 +61,20 @@ class DigitalizacoesAdapter(private val context: Context, private val dataSet: M
         }
 
         viewHolder.acao.setOnClickListener {
-            item.onClickCancelButton()
-        }
-    }
+            val builder = AlertDialog.Builder(context)
+            builder.setTitle("Cancelar Digitalização")
+            builder.setMessage("Ao cancelar, o seu pedido sai da fila de digitalização. Um novo pedido para o mesmo livro irá para o final da fila.")
 
-    private fun decodeBase64ToBitmap(base64String: String): Bitmap? {
-        return try {
-            val decodedBytes = android.util.Base64.decode(base64String, android.util.Base64.DEFAULT)
-            BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
+            builder.setPositiveButton("Confirmar") { dialog, _ ->
+                dialog.dismiss()
+            }
+
+            builder.setNegativeButton("Cancelar") { dialog, _ ->
+                dialog.dismiss()
+            }
+
+            val dialog = builder.create()
+            dialog.show()
         }
     }
 

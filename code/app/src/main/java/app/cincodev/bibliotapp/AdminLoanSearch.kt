@@ -1,85 +1,100 @@
 package app.cincodev.bibliotapp
 
 import android.os.Bundle
+import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
-import java.time.ZoneId
-import java.time.temporal.ChronoUnit
-import java.util.Date
 
 class AdminLoanSearch : AppCompatActivity() {
 
-    lateinit var arrowBackButtonView: ImageButton
-    lateinit var searchBar: EditText
-    lateinit var recyclerView: RecyclerView
+    private lateinit var arrowBackButtonView: ImageButton
+    private lateinit var adapter: AdminLoansAdapter
+    private val loansList = mutableListOf<Loan>()
+    private val filteredList = mutableListOf<Loan>()
 
-    private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
-    private val loans: MutableList<Loan> = mutableListOf()
-    private var filteredLoans: MutableList<Loan> = mutableListOf()
+    // Instância do Firebase
+    private val db = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_admin_loan_search)
+        // ^ Verifique se o nome do seu layout é esse mesmo.
+        // Se for activity_admin_book_search, altere aqui.
 
-        arrowBackButtonView = findViewById(R.id.adminLoanSearchArrowBack)
-        searchBar = findViewById(R.id.search_input)
-        recyclerView = findViewById(R.id.recyclerEmprestimo)
+        setupViews()
+        fetchLoansFromFirebase()
+    }
 
+    private fun setupViews() {
+        // Botão Voltar
+        arrowBackButtonView = findViewById(R.id.SpaceBookingSearchArrowBack) // Ajuste o ID se necessário
         arrowBackButtonView.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
-        searchBar.addTextChangedListener { text ->
-            val textString = text.toString()
-            if (textString.isEmpty()) {
-                filteredLoans.clear()
 
-                recyclerView.swapAdapter(AdminLoansAdapter(loans), false)
-            } else {
-                filteredLoans = loans.filter { loan ->
-                    loan.registro.lowercase()
-                        .contains(textString.lowercase()) || loan.matricula.contains(textString)
-                }.toMutableList()
+        // RecyclerView
+        val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(this)
 
-                recyclerView.swapAdapter(AdminLoansAdapter(filteredLoans), false)
-            }
+        // Inicializa o Adapter
+        adapter = AdminLoansAdapter(filteredList) { loan ->
+            // Ação ao clicar no item (Ex: Devolver livro)
+            Toast.makeText(this, "Empréstimo selecionado: ${loan.bookTitle}", Toast.LENGTH_SHORT).show()
         }
+        recyclerView.adapter = adapter
+
+        // Barra de Pesquisa
+        val searchEditText = findViewById<EditText>(R.id.etPesquisa)
+        searchEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                filter(s.toString())
+            }
+        })
     }
 
-    override fun onStart() {
-        db
-            .collection("emprestimos")
+    private fun fetchLoansFromFirebase() {
+        // Busca na coleção "loans" (ou "emprestimos", dependendo de como você criou no Firebase)
+        db.collection("emprestimos")
             .get()
             .addOnSuccessListener { documents ->
+                loansList.clear()
                 for (document in documents) {
-                    val todayDate = Date()
-                    val returnDate = (document["devolver_em"] as Timestamp).toDate()
-                    val daysOverdue = ChronoUnit.DAYS.between(
-                        todayDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
-                        returnDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
-                    )
-
-                    loans.add(
-                        Loan(
-                            document.id,
-                            document["users_id"] as String,
-                            (if (daysOverdue < 0) "0" else daysOverdue.toString()) + " dia(s)",
-                            if (returnDate.before(todayDate)) "Em dia" else "Atrasado"
-                        )
-                    )
+                    val loan = document.toObject(Loan::class.java)
+                    loan.id = document.id
+                    loansList.add(loan)
                 }
-
-                val customAdapter = AdminLoansAdapter(loans)
-                recyclerView.layoutManager = LinearLayoutManager(this)
-                recyclerView.adapter = customAdapter
+                // Atualiza a lista visual
+                filter("")
             }
+            .addOnFailureListener { exception ->
+                Log.w("AdminLoanSearch", "Erro ao buscar empréstimos", exception)
+                Toast.makeText(this, "Erro ao carregar dados", Toast.LENGTH_SHORT).show()
+            }
+    }
 
-        super.onStart()
+    private fun filter(text: String) {
+        filteredList.clear()
+        if (text.isEmpty()) {
+            filteredList.addAll(loansList)
+        } else {
+            val query = text.lowercase()
+            for (item in loansList) {
+                if (item.bookTitle.lowercase().contains(query) ||
+                    item.userName.lowercase().contains(query)) {
+                    filteredList.add(item)
+                }
+            }
+        }
+        adapter.notifyDataSetChanged()
     }
 }
