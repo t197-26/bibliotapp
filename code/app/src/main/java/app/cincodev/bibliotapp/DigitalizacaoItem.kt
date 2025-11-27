@@ -7,5 +7,6 @@ data class DigitalizacaoItem(
     val requisitante: String,
     val paginas: String,
     val registro: String,
-    var status: String
+    var status: String,
+    var abertoEm: String? = null,
 )
