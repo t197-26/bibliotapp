@@ -38,12 +38,12 @@ class DigitalizacoesAdapter(private val context: Context, private val dataSet: M
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val item = dataSet[position]
 
-        viewHolder.titulo.text = item.material.nome
+        viewHolder.titulo.text = item.material.titulo
         viewHolder.dataPedido.text = "Pedido em: ${item.request.abertoEm ?: ""}"
         viewHolder.paginas.text = "Páginas: ${item.request.paginas}"
         viewHolder.status.text = item.request.status
 
-        val capaBase64 = item.material.imagemUrl
+        val capaBase64 = item.material.capa
         if (capaBase64.isNotEmpty()) {
             val bitmap = decodeBase64ToBitmap(capaBase64)
             if (bitmap != null) {

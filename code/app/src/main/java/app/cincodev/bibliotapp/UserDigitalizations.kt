@@ -193,7 +193,7 @@ class UserDigitalizations : AppCompatActivity() {
             return
         }
 
-        val filteredDataset = dataset.filter { it -> it.material.nome.lowercase().contains(search.lowercase()) }
+        val filteredDataset = dataset.filter { it -> it.material.titulo.lowercase().contains(search.lowercase()) }
         recyclerView.swapAdapter(DigitalizacoesAdapter(this@UserDigitalizations, filteredDataset.toMutableList()), false)
     }
 }
