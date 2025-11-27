@@ -63,7 +63,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <EditText
-            android:id="@+id/inputSearch"
+            android:id="@+id/searchAdminBooks"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

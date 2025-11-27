@@ -2,6 +2,9 @@ package app.cincodev.bibliotapp
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,6 +16,8 @@ class AdminBookSearch : AppCompatActivity(),
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: AdminBookSearchAdapter
+    private lateinit var searchInput: EditText
+
     private val listaMateriais = mutableListOf<Material>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,10 +27,26 @@ class AdminBookSearch : AppCompatActivity(),
         recyclerView = findViewById(R.id.recyclerAdminBookSearch)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
+        searchInput = findViewById(R.id.searchAdminBooks)
+
         adapter = AdminBookSearchAdapter(this, listaMateriais, this)
         recyclerView.adapter = adapter
 
+        configurarFiltro()
+
         carregarMateriais()
+    }
+
+    private fun configurarFiltro() {
+        searchInput.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                adapter.filtrar(s.toString())
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+        })
     }
 
     private fun carregarMateriais() {
@@ -33,6 +54,7 @@ class AdminBookSearch : AppCompatActivity(),
             .collection("materiais")
             .get()
             .addOnSuccessListener { result ->
+
                 listaMateriais.clear()
 
                 for (doc in result) {
@@ -53,7 +75,6 @@ class AdminBookSearch : AppCompatActivity(),
     }
 
     override fun onEditClick(material: Material) {
-
         val intent = Intent(this, AdminBookEditor::class.java)
 
         intent.putExtra("materialId", material.id)
