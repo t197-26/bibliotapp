@@ -69,6 +69,7 @@ class AdminLoansAdapter(
 
         popupView.findViewById<Button>(R.id.btnGerarMulta).setOnClickListener {
             val intent = Intent(context, AdminFee::class.java)
+            intent.putExtra("loanId", dataSet[position].registro)
             context.startActivity(intent)
             popupWindow.dismiss()
         }
