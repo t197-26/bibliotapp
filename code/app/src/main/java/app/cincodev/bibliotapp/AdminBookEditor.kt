@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Base64
+import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.ImageButton
@@ -18,6 +19,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import android.widget.EditText
+import androidx.core.content.edit
 
 class AdminBookEditor : AppCompatActivity() {
 
@@ -45,9 +47,21 @@ class AdminBookEditor : AppCompatActivity() {
     lateinit var btnCreateExemplar: ImageView
     lateinit var btnDescartar: Button
 
+    private var novacapa: String? = null
     private val pickImageLauncher =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-            uri?.let { capa.setImageURI(it) }
+            uri?.let {
+                capa.setImageURI(it)
+
+                val bytes = getBytesFromUri(it)
+                bytes?.let { imageBytes ->
+                    novacapa = Base64.encodeToString(
+                        imageBytes,
+                        Base64.NO_WRAP
+                    )
+                }
+                Log.i("JORGE", novacapa.toString())
+            }
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,6 +78,9 @@ class AdminBookEditor : AppCompatActivity() {
         val autorExtra = intent.getStringExtra("autor")
         val materialExtra = intent.getStringExtra("material")
         val cduExtra = intent.getStringExtra("cdu")
+
+        val prefs = getSharedPreferences("arquivo",MODE_PRIVATE)
+        prefs.edit { putString("BOOK_ID", bookId) }
 
         capa = findViewById(R.id.capa)
         selecionarCapa = findViewById(R.id.selecionarCapa)
@@ -109,6 +126,8 @@ class AdminBookEditor : AppCompatActivity() {
         editarMaterial.setOnClickListener { confirmarEdicao(this) }
         btnCreateExemplar.setOnClickListener { createExemplar(bookId) }
 
+        Log.i("JORGE", base64Capa.toString())
+
         // CARREGAR CAMPOS COMPLETOS DO FIRESTORE
         readMaterial(bookId)
         loadExemplares(bookId)
@@ -135,6 +154,7 @@ class AdminBookEditor : AppCompatActivity() {
             .document(bookId)
             .update(
                 mapOf(
+                    "capa" to novacapa,
                     "titulo" to titulo.text.toString(),
                     "material" to material.text.toString(),
                     "idioma" to idioma.text.toString(),
@@ -206,5 +226,16 @@ class AdminBookEditor : AppCompatActivity() {
         }
 
         dialog.show()
+    }
+
+    private fun getBytesFromUri(uri: Uri): ByteArray? {
+        return try {
+            contentResolver.openInputStream(uri)?.use { inputStream ->
+                inputStream.readBytes()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
     }
 }
