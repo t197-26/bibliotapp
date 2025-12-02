@@ -2,6 +2,7 @@ package app.cincodev.bibliotapp
 
 import android.app.AlertDialog
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -63,7 +64,7 @@ class AdminLoansAdapter(
         }
 
         popupView.findViewById<Button>(R.id.btnReceber).setOnClickListener {
-            confirmarRecebimento(context, dataSet[position].registro)
+            confirmarRecebimento(context, dataSet[position])
             popupWindow.dismiss()
         }
 
@@ -77,7 +78,7 @@ class AdminLoansAdapter(
         popupWindow.showAsDropDown(anchorView, -85, 0)
     }
 
-    private fun confirmarRecebimento(context: android.content.Context, loadId: String) {
+    private fun confirmarRecebimento(context: android.content.Context, loan: Loan) {
         val dialogView = LayoutInflater.from(context)
             .inflate(R.layout.dialog_confirmation_loan_received, null)
 
@@ -95,18 +96,43 @@ class AdminLoansAdapter(
         btnConfirmar.setOnClickListener {
             db
                 .collection("emprestimos")
-                .document(loadId).delete()
-                .addOnSuccessListener {
-                    Toast.makeText(context, "Emprestimo fechado com sucesso", Toast.LENGTH_LONG).show()
-                    dataSet.removeIf { loan ->  loan.registro == loadId }
+                .document(loan.registro)
+                .get()
+                .addOnSuccessListener { documentSnapshot ->
+                    val loanJsonData = documentSnapshot.data
+                    if (loanJsonData == null) return@addOnSuccessListener
 
-                    this.notifyDataSetChanged()
-                }
-                .addOnFailureListener {
-                    Toast.makeText(context, "Ocorreu um erro ao fechar o emprestimo. Tente novamente", Toast.LENGTH_LONG).show()
-                }
+                    val loanMaterialId = loanJsonData["materiais_id"] as String
+                    val loanMaterialUnitId = loanJsonData["exemplares_id"] as String
 
-            dialog.dismiss()
+                    db
+                        .collection("materiais")
+                        .document(loanMaterialId)
+                        .collection("exemplares")
+                        .document(loanMaterialUnitId)
+                        .update(mapOf("status" to "Disponivel"))
+                        .addOnSuccessListener {
+                            Log.i("loanUpdate", "success")
+                        }
+                        .addOnFailureListener { exception ->
+                            Log.i("loanUpdate", exception.toString())
+                        }
+
+                    db
+                        .collection("emprestimos")
+                        .document(loan.registro).delete()
+                        .addOnSuccessListener {
+                            Toast.makeText(context, "Emprestimo fechado com sucesso", Toast.LENGTH_LONG).show()
+                            dataSet.removeIf { loanInAdapter ->  loanInAdapter.registro == loan.registro }
+
+                            this.notifyDataSetChanged()
+                        }
+                        .addOnFailureListener {
+                            Toast.makeText(context, "Ocorreu um erro ao fechar o emprestimo. Tente novamente", Toast.LENGTH_LONG).show()
+                        }
+
+                        dialog.dismiss()
+                }
         }
 
         dialog.show()

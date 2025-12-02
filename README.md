@@ -1,50 +1,19 @@
-https://www.figma.com/design/7CvbwmzpuWjC5paFqGieki/Bibliotapp?node-id=0-1&t=7UV0EoNedkUIC6eK-1
+# Bibliotapp
 
+O projeto consiste em um aplicativo desenvolvido para a biblioteca da Unifor, com o objetivo de facilitar o controle de empréstimos, reserva de espaços de estudo e integrar o espaço da biblioteca e seu acervo.
 
-Firebase schema do https://dbdiagram.io/d
-// Use DBML to define your database structure
-// Docs: https://dbml.dbdiagram.io/docs
+Durante o desenvolvimento, produzimos uma documentação com o levantamento de requisitos do aplicativo, um protótipo de telas de alta fidelidade no Figma, e toda o histórico de desenvolvimento foi registrado em um repositório no Github.
 
-Table users {
-  matricula string [primary key]
-  email string
-  name string
-  password string
-  isAdmin bool
-  created_at timestamp
-}
+## Funcionalidades
+O app divide suas atividades na visão do admin. e na do usuário.
 
-Table materiais {
-  id integer [primary key]
-  autor string
-  capa binary
-  cdu string
-  edicao string
-  idioma string
-  isbn string
-  material string
-  publicacao string
-  titulo string
-  created_at timestamp
-}
+É possível buscar materiais no acervo, registrar, editar e visualizar detalhe de materiais e seus exemplares cativos pela biblioteca, gerenciar empréstimos e gerar multas de atrasos, pedir digitalizações de um intervalo de um material, além de visualizar o mapa do espaço da biblioteca e reservar cubículos para estudo individual.
 
-Table exemplares {
-  id integer [primary key]
-  materiais_id string
-  created_at timestamp
-}
+## Equipe
+- Pedro Henrique Pinheiro de Oliveira
+- Lucas Rodrigues Coelho
+- Nicolas Marcelino da Mota
+- Italo Araujo de Almeida
 
-Table emprestimos {
-  id integer [primary key]
-  users_matricula string
-  exemplares_id string
-  emprestado_em timestamp
-  devolver_em timestamp
-  created_at timestamp
-}
-
-Ref: "users"."matricula" < "emprestimos"."users_matricula"
-
-Ref: "exemplares"."id" < "emprestimos"."exemplares_id"
-
-Ref: "materiais"."id" < "exemplares"."materiais_id"
+## Anexos
+[Design do aplicativo](https://www.figma.com/design/7CvbwmzpuWjC5paFqGieki/Bibliotapp?node-id=0-1&t=7UV0EoNedkUIC6eK-1)
