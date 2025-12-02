@@ -44,7 +44,7 @@
         android:layout_marginTop="50dp"
         android:ems="10"
         android:hint="Matricula"
-        android:inputType="text"
+        android:inputType="number"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/AccountRegisterSubtitleTextView" />
@@ -56,7 +56,7 @@
         android:layout_marginTop="20dp"
         android:ems="10"
         android:hint="Nome Completo"
-        android:inputType="text"
+        android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/AccountRegisterMatriculaEditText" />
@@ -68,7 +68,7 @@
         android:layout_marginTop="20dp"
         android:ems="10"
         android:hint="Email"
-        android:inputType="text"
+        android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/AccountRegisterFullNameEditText" />
@@ -80,7 +80,7 @@
         android:layout_marginTop="20dp"
         android:ems="10"
         android:hint="Senha"
-        android:inputType="textPassword"
+        android:inputType="numberPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/AccountRegisterEmailEditText" />
@@ -92,7 +92,7 @@
         android:layout_marginTop="20dp"
         android:ems="10"
         android:hint="Confirme a senha"
-        android:inputType="textPassword"
+        android:inputType="numberPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/AccountRegisterPasswordEditText" />
@@ -102,33 +102,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:checked="false"
         android:text="É administrador?"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/AccountRegisterPasswordConfirmationEditText" />
 
     <TextView
-        android:id="@+id/AccountRegisterMissingFieldsTextView"
+        android:id="@+id/AccountRegisterAlertFieldsTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="Todos os campos são obrigatórios."
         android:textColor="@color/wrong_red"
         android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/AccountRegisterRegisterButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/AccountRegisterAdministratorSwitch" />
-
-    <TextView
-        android:id="@+id/AccountRegisterPasswordNotMatchingTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="As senhas não são iguais."
-        android:textColor="@color/wrong_red"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/AccountRegisterRegisterButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/AccountRegisterAdministratorSwitch" />

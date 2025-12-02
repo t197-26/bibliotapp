@@ -1,5 +1,6 @@
 package app.cincodev.bibliotapp
 
+import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
@@ -7,8 +8,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import androidx.core.content.edit
 
-class QuickBookAdapter(private val dataSet: Array<QuickBook>) :
+class QuickBookAdapter(private val dataSet: List<QuickBook>) :
     RecyclerView.Adapter<QuickBookAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -25,13 +27,28 @@ class QuickBookAdapter(private val dataSet: Array<QuickBook>) :
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        viewHolder.capa.setImageResource(dataSet[position].capa)
-        viewHolder.titulo.text = dataSet[position].titulo
-        viewHolder.devolucao.text = dataSet[position].devolucao
+        val book = dataSet[position]
+
+        if (book.capa != null) {
+            viewHolder.capa.setImageBitmap(book.capa)
+        } else {
+            viewHolder.capa.setImageResource(R.drawable.book_01)
+        }
+
+        viewHolder.titulo.text = book.titulo
+        viewHolder.devolucao.text = book.devolucao
 
         viewHolder.itemView.setOnClickListener {
             val context = viewHolder.itemView.context
             val intent = Intent(context, UserBookDetail::class.java)
+
+            // Pass the document ID to the detail activity
+            //intent.putExtra("BOOK_ID", book.id)
+
+            val x = context.getSharedPreferences("arquivo",MODE_PRIVATE)
+            x.edit {
+                putString("BOOK_ID", book.id)
+            }
 
             context.startActivity(intent)
         }

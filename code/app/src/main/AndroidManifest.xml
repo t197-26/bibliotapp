@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Bibliotapp">
         <activity
+            android:name=".MainActivity2"
+            android:exported="false" />
+        <activity
             android:name=".AdminEditExemplar"
             android:exported="false" />
         <activity
@@ -105,7 +108,7 @@
             android:name=".ForgetPassword"
             android:exported="false" />
         <activity
-            android:name=".Login"
+            android:name=".LoginActivity"
             android:exported="false" />
         <activity
             android:name=".Welcome"

@@ -1,5 +1,6 @@
 package app.cincodev.bibliotapp
 
+import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -7,6 +8,7 @@ import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+
 
 class ReserveSpace : AppCompatActivity() {
     lateinit var arrowBackButtonView: ImageButton
@@ -27,19 +29,20 @@ class ReserveSpace : AppCompatActivity() {
             ReservaItem("Cubículo C12", "Entrada: 20/09/2025 15:00", "Saída: 20/09/2025 13:00")
         )
 
-        val customAdapter = ListaReservasEspacoAdapter(dataset)
+        val customAdapter = ListaReservasEspacoAdapter(this, dataset)
 
         val recyclerView: RecyclerView = findViewById(R.id.reservaCartoes)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = customAdapter
-
-
     }
 
     override fun onStart() {
-        arrowBackButtonView = findViewById(R.id.LoginArrowBack)
-        arrowBackButtonView.setOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
+        val botaoCalendario = findViewById<ImageButton>(R.id.botaoCalendario)
+
+        botaoCalendario.setOnClickListener {
+            val datePickerDialog: DatePickerDialog = DatePickerDialog(this)
+
+            datePickerDialog.show()
         }
 
         val goToSelectionButton = findViewById<Button>(R.id.goToSelection)

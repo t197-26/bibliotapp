@@ -40,7 +40,7 @@
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginBottom="80dp"
+        android:layout_marginBottom="20dp"
         android:background="@drawable/bg_search_bar"
         android:gravity="center_vertical"
         android:orientation="horizontal"
@@ -68,35 +68,16 @@
             android:src="@drawable/ic_search" />
     </LinearLayout>
 
-
-
-    <LinearLayout
-        android:id="@+id/AdminHomeBottomBarLinearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:gravity="center|top"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <ImageView
-            android:id="@+id/AdminHomeBottomBarHomeImageView"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/ic_home" />
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/textView29"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="150dp"
-        android:layout_marginEnd="150dp"
-        android:text="Nenhum resultado"
-        android:textColor="@color/unifor.anil"
-        android:textSize="14sp"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerBooks"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:padding="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/searchContainer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="354dp" />
+        app:layout_constraintTop_toBottomOf="@id/textView24"
+        tools:listitem="@layout/item_book_list_search_user" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

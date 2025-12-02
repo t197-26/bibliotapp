@@ -15,7 +15,6 @@
         android:orientation="horizontal"
         android:padding="8dp">
 
-        <!-- Book Cover -->
         <ImageView
             android:id="@+id/imgCover"
             android:layout_width="60dp"
@@ -26,7 +25,6 @@
             android:background="@drawable/image_border"
             android:contentDescription="Imagem do livro" />
 
-        <!-- Book Details -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -63,7 +61,6 @@
                 android:textSize="12sp"
                 android:layout_marginTop="1dp" />
 
-            <!-- Status Chip -->
             <TextView
                 android:id="@+id/txtStatus"
                 android:layout_width="wrap_content"
@@ -77,7 +74,6 @@
                 android:background="@drawable/status_chip_background" />
         </LinearLayout>
 
-        <!-- Optional Action Icon (e.g. X for cancel) -->
         <ImageView
             android:id="@+id/imgAction"
             android:layout_width="20dp"

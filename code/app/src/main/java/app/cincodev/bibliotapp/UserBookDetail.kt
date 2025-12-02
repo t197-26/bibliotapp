@@ -3,90 +3,198 @@ package app.cincodev.bibliotapp
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
-import android.widget.PopupWindow
+import android.widget.TextView
+import android.util.Base64
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.util.Log
+import android.widget.Button
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import com.google.type.DateTime
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class UserBookDetail : AppCompatActivity() {
 
     lateinit var arrowBackButtonView: ImageButton
 
+    // Firebase
+    lateinit var fb:FirebaseFirestore
+
+    // Campos do detalhamento de material
+    lateinit var bookCapa: ImageView
+    lateinit var etBookTitle: TextView
+    lateinit var etBookMaterial: TextView
+    lateinit var bookIdioma: TextView
+    lateinit var bookISBN: TextView
+    lateinit var bookAutor: TextView
+    lateinit var bookCDU: TextView
+    lateinit var bookEdicao: TextView
+    lateinit var bookPublicacao: TextView
+    lateinit var recyclerView: RecyclerView
+    lateinit var requestDigitalizationButton: Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_book_detail)
 
+        fb = Firebase.firestore
+
+        etBookTitle = findViewById(R.id.bookTitle)
+        etBookMaterial = findViewById(R.id.bookMaterial)
+        bookIdioma = findViewById(R.id.bookIdioma)
+        bookISBN = findViewById(R.id.bookISBN)
+        bookAutor = findViewById(R.id.bookAutor)
+        bookCDU = findViewById(R.id.bookCDU)
+        bookEdicao = findViewById(R.id.bookEdicao)
+        bookPublicacao = findViewById(R.id.bookPublicacao)
+        bookCapa = findViewById(R.id.bookCover)
+        requestDigitalizationButton = findViewById(R.id.requestDigitalizationButton)
+
+        val x = getSharedPreferences("arquivo", MODE_PRIVATE)
+        val bookId = x.getString("BOOK_ID", "default") ?: "default"
+        val user = x.getString("BOOK_ID", "default") ?: "default"
+
+        requestDigitalizationButton.setOnClickListener {
+            val dialogBuilder: AlertDialog.Builder = AlertDialog.Builder(this@UserBookDetail)
+            val pagesInput: EditText = EditText(this).apply {
+                hint = "1-4, 10, 20"
+            }
+
+            dialogBuilder
+                .setView(pagesInput)
+                .setTitle("Páginas que precisam ser digitalizadas")
+                .setMessage("Especique quais páginas precisam ser digitalizadas utilizando hífen para intervalos de páginas (1-4), ou apenas especificando uma página específica (20), separando as instruções por virgulas")
+                .setPositiveButton("Solicitar") { dialog, which ->
+                    val validPagesInput = mutableListOf<String>()
+
+                    pagesInput.text.toString().split(",").map { it.trim() }.forEach { pages ->
+                        when {
+                            Regex("""^\d+$""").matches(pages) -> {
+                                val singlePage = pages.toInt()
+
+                                validPagesInput.add(singlePage.toString())
+                            }
+
+                            Regex("""^\d+-\d+$""").matches(pages) -> {
+                                val (start, end) = pages.split("-").map { it.toInt() }
+
+                                validPagesInput.add("${start}-${end}")
+                            }
+                        }
+                    }
+
+                    getSharedPreferences("bibliotapp_shared_preferences", MODE_PRIVATE).let {
+                        val today = LocalDate.now()
+                        val dateTimeFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+                        val formattedDate = today.format(dateTimeFormat)
+
+                        val digitalizationOrder = hashMapOf(
+                            "id" to "",
+                            "material_id" to bookId,
+                            "requisitante" to (it.getString("matricula", "-") ?: "-"),
+                            "paginas" to validPagesInput.joinToString(", "),
+                            "registro" to "-",
+                            "status" to "Em fila",
+                            "abertoEm" to formattedDate
+                        )
+
+                        fb.collection("digitalizacoes")
+                            .document()
+                            .set(digitalizationOrder)
+                            .addOnSuccessListener { Log.d("Firestore", "DocumentSnapshot successfully written!") }
+                            .addOnFailureListener { e -> Log.w("Firestore", "Error writing document", e) }
+                    }
+
+
+                    dialog.dismiss()
+                }
+                .setNegativeButton("Cancelar") { dialog, which ->
+                    dialog.dismiss()
+                }
+
+
+            dialogBuilder.create().show()
+        }
+
         arrowBackButtonView = findViewById(R.id.userBookDetailArrowBack)
         arrowBackButtonView.setOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
+            startActivity(Intent(this, UserHome::class.java))
         }
 
-        val bookExemplarMenu: ImageView = findViewById(R.id.bookExemplarMenu)
+        // Chamada dos detalhes do material
+        getBookDetails(bookId)
 
-        bookExemplarMenu.setOnClickListener {
-            showPopupMenu(bookExemplarMenu)
+        val exemplares = mutableListOf<Exemplar>()
+
+        recyclerView = findViewById<RecyclerView>(R.id.exemplaresRecyler)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = ExemplaresAdapter(this, exemplares)
+
+        // Chamada de exemplares
+        loadExemplares(bookId, exemplares, recyclerView)
+
+    }
+
+    // Função para chamada da informações
+    private fun getBookDetails(bookId:String) {
+
+        fb.collection("materiais")
+            .document(bookId)
+            .get()
+            .addOnSuccessListener { result ->
+                etBookTitle.text = result.get("titulo").toString()
+                etBookMaterial.text = result.get("material").toString()
+                bookIdioma.text = result.get("idioma").toString()
+                bookISBN.text = result.get("isbn").toString()
+                bookAutor.text = result.get("autor").toString()
+                bookCDU.text = result.get("cdu").toString()
+                bookEdicao.text = result.get("edicao").toString()
+                bookPublicacao.text = result.get("publicacao").toString()
+
+                val capaBase64 = result.get("capa") as? String
+                if (capaBase64 != null && capaBase64.isNotEmpty()) {
+                    val bitmap = decodeBase64ToBitmap(capaBase64)
+                    if (bitmap != null) {
+                        bookCapa.setImageBitmap(bitmap)
+                    }
+                }
+            }
+    }
+    private fun loadExemplares(bookId: String, exemplares: MutableList<Exemplar>, recycler: RecyclerView) {
+        fb.collection("materiais")
+            .document(bookId)
+            .collection("exemplares")
+            .get()
+            .addOnSuccessListener { snapshot ->
+                exemplares.clear()
+                for (doc in snapshot) {
+                    val id = doc.id
+                    val suporte = doc.getString("suporte") ?: ""
+                    val registro = doc.getString("registro") ?: ""
+                    val disponibilidade = doc.getString("disponibilidade") ?: ""
+                    val status = doc.getString("status") ?: ""
+                    exemplares.add(Exemplar(id, suporte, registro, disponibilidade, status))
+                }
+                recyclerView.adapter?.notifyDataSetChanged()
+            }
+    }
+
+    private fun decodeBase64ToBitmap(base64String: String): Bitmap? {
+        return try {
+            val decodedBytes = Base64.decode(base64String, Base64.DEFAULT)
+            BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
         }
     }
 
-    private fun showPopupMenu(anchorView: ImageView) {
-        // Inflate custom popup layout
-        val inflater = LayoutInflater.from(this)
-        val popupView = inflater.inflate(R.layout.custom_menu_exemplar, null)
-
-        // Create PopupWindow
-        val popupWindow = PopupWindow(
-            popupView,
-            ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT,
-            true // dismiss on outside touch
-        )
-
-        popupWindow.elevation = 16f // adds shadow
-
-        // Setup button listeners inside popup
-        popupView.findViewById<Button>(R.id.btnReservar).setOnClickListener {
-            confirmarReserva(context = this)
-            popupWindow.dismiss()
-        }
-
-        popupView.findViewById<Button>(R.id.btnDigitalizar).setOnClickListener {
-            popupWindow.dismiss()
-            startActivity(Intent(this, UserDigitalizationOrder::class.java))
-        }
-
-        popupView.findViewById<Button>(R.id.btnVerNoMapa).setOnClickListener {
-            popupWindow.dismiss()
-            startActivity(Intent(this, UserSpaceMap::class.java))
-        }
-
-        // Show the popup anchored to the menu button
-        // You can adjust offsets (x, y) as needed
-        popupWindow.showAsDropDown(anchorView, -150, -350)
-    }
-
-    private fun confirmarReserva(context: android.content.Context) {
-        val dialogView = LayoutInflater.from(context)
-            .inflate(R.layout.dialog_confirmation_reservation_book, null)
-
-        val dialog = AlertDialog.Builder(context)
-            .setView(dialogView)
-            .create()
-
-        val btnCancelar = dialogView.findViewById<Button>(R.id.btnCancelar)
-        val btnConfirmar = dialogView.findViewById<Button>(R.id.btnConfirmar)
-
-        btnCancelar.setOnClickListener {
-            dialog.dismiss()
-        }
-
-        btnConfirmar.setOnClickListener {
-            startActivity(Intent(this, UserProcessingBooking::class.java))
-            dialog.dismiss()
-        }
-
-        dialog.show()
-    }
 }

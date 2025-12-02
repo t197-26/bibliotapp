@@ -60,7 +60,7 @@
         </LinearLayout>
 
         <ImageButton
-            android:id="@+id/imageButton5"
+            android:id="@+id/buttonCancelar"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_weight="0"
